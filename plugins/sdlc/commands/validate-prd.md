@@ -8,12 +8,25 @@ You are starting the **Validate PRD** workflow — a 13-step comprehensive revie
 
 ## Setup
 
-1. **Load Configuration**: Read `{project-root}/_bmad/bmm/config.yaml` if it exists. Resolve:
-   - `project_name`, `output_folder`, `planning_artifacts`, `user_name`
-   - `communication_language`, `document_output_language`, `user_skill_level`
-   - `date` as system-generated current datetime
+1. **Language Preferences** *(always ask before anything else)*:
 
-2. **Ask User Preference**:
+   Ask the user:
+
+   "Before we begin, let me confirm your language preferences:
+
+   1. **Communication language** — What language should I speak to you in? (e.g. English, Vietnamese, French...)
+   2. **Document output language** — What language should the validation report be written in? (e.g. English, Vietnamese, French...)
+
+   *(Press Enter to use English for both, or specify your preferences.)*"
+
+   Store the answers as `{communication_language}` and `{document_output_language}`. From this point forward, speak to the user in `{communication_language}` and write all report content in `{document_output_language}`.
+
+2. **Load Configuration**: Read `{project-root}/_bmad/bmm/config.yaml` if it exists. Resolve:
+   - `project_name`, `output_folder`, `planning_artifacts`, `user_name`, `user_skill_level`
+   - `date` as system-generated current datetime
+   - Use language preferences from step 1 (override config values if user provided them)
+
+3. **Ask User Preference**:
 
    "How would you like to run validation?
 
@@ -21,7 +34,7 @@ You are starting the **Validate PRD** workflow — a 13-step comprehensive revie
 
    **[B] Interactive** — Run validation steps directly in this conversation. You'll see each step's results and can interact during the process."
 
-3. **Route Based on Choice**:
+4. **Route Based on Choice**:
 
    - **If A (Subagent)**: Ask for the PRD file path, then delegate to the `prd-validator` subagent with instructions to validate that PRD. Present the returned report to the user.
 
