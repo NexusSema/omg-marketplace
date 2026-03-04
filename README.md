@@ -6,23 +6,40 @@ A Claude Code plugin that brings structured, interactive SDLC workflows to your 
 
 > Future releases will extend coverage across the full SDLC: UX design, architecture, epic/story breakdown, sprint planning, implementation, QA, and retrospectives.
 
-## Quick Start
+## Install
+
+### Option 1: Install the full marketplace
+
+Adds all plugins from the OM Nexus Official marketplace:
 
 ```bash
-# Install the plugin
-claude plugin add ./path/to/nexus-claude-plugin
+claude marketplace add NexusSema/omg-marketplace
+```
 
-# Start creating a PRD
+### Option 2: Install just the SDLC plugin
+
+```bash
+claude plugin add --from NexusSema/omg-marketplace sdlc
+```
+
+### Verify installation
+
+```bash
+# Should list sdlc commands
+/sdlc:help
+```
+
+## Usage
+
+```bash
+# Create a PRD from scratch (12-step interactive workflow)
 /sdlc:create-prd
 
-# Validate an existing PRD
+# Validate an existing PRD against BMAD standards (13 checks)
 /sdlc:validate-prd
 
-# Edit and improve a PRD
+# Edit and improve an existing PRD (5-step workflow)
 /sdlc:edit-prd
-
-# See all available commands
-/sdlc:help
 ```
 
 ## What You Get
@@ -42,9 +59,9 @@ The plugin uses four Claude Code extension types working together:
 
 ```
 Commands ──> Skills ──> Step Files (references/)
-                  │
+                  |
                   └──> Subagent (isolated validation)
-                  │
+                  |
 Hooks ─────────────> Format checks on every PRD edit
 ```
 
