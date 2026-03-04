@@ -37,10 +37,7 @@ All three workflows use the same execution model:
 - **Just-in-time loading** — Future steps are never pre-read. This prevents skipping ahead and ensures each step gets full attention.
 - **Sequential enforcement** — Steps must complete in order. No skipping, no optimization, no reordering.
 - **State tracking** — Progress is recorded in the output document's frontmatter (`stepsCompleted` array). If a workflow is interrupted, it can resume from where it left off.
-- **Interactive menus** — Every step ends with a menu. Claude halts and waits for your input before proceeding. Common options:
-  - **[C] Continue** — Advance to the next step
-  - **[A] Advanced Elicitation** — Deeper requirement discovery (optional, requires BMAD core)
-  - **[P] Party Mode** — Multi-agent brainstorming (optional, requires BMAD core)
+- **Interactive menus** — Every step ends with a menu. Claude halts and waits for your input before proceeding. The primary option is **[C] Continue** to advance to the next step.
 
 ### The Traceability Chain
 

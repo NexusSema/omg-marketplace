@@ -7,7 +7,6 @@ nextStepFile: 'step-e-03-edit.md'
 prdFile: '{prd_file_path}'
 validationReport: '{validation_report_path}'  # If provided
 prdPurpose: '${PLUGIN_ROOT}/skills/prd-standards/references/prd-purpose.md'
-advancedElicitationTask: '{project-root}/_bmad/core/workflows/advanced-elicitation/workflow.xml # Optional: requires BMAD core'
 ---
 
 # Step E-2: Deep Review & Analysis
@@ -208,8 +207,6 @@ Read fully and follow: {nextStepFile} (step-e-03-edit.md)
 
 ### 7. Present MENU OPTIONS (If User Wants Discussion)
 
-**[A] Advanced Elicitation** - Get additional perspectives on change plan
-**[P] Party Mode** - Discuss with team for more ideas
 **[C] Continue to Edit** - Proceed with approved plan
 
 #### EXECUTION RULES:
@@ -219,8 +216,6 @@ Read fully and follow: {nextStepFile} (step-e-03-edit.md)
 
 #### Menu Handling Logic:
 
-- IF A: Read fully and follow: {advancedElicitationTask}, then return to discussion
-- IF P: Read fully and follow: {partyModeWorkflow}, then return to discussion
 - IF C: Document approval, then load {nextStepFile}
 - IF Any other: discuss, then redisplay menu
 

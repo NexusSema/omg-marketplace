@@ -6,9 +6,6 @@ description: 'Map ALL user types that interact with the system with narrative st
 nextStepFile: 'step-05-domain.md'
 outputFile: '{planning_artifacts}/prd.md'
 
-# Task References
-advancedElicitationTask: '{project-root}/_bmad/core/workflows/advanced-elicitation/workflow.xml # Optional: requires BMAD core'
-partyModeWorkflow: '{project-root}/_bmad/core/workflows/party-mode/workflow.md # Optional: requires BMAD core'
 ---
 
 # Step 4: User Journey Mapping
@@ -30,7 +27,7 @@ partyModeWorkflow: '{project-root}/_bmad/core/workflows/party-mode/workflow.md #
 ## EXECUTION PROTOCOLS:
 
 - Show your analysis before taking any action
-- Present A/P/C menu after generating journey content
+- Present menu after generating journey content
 - ONLY save when user chooses C (Continue)
 - Update output file frontmatter, adding this step name to the end of the list of stepsCompleted
 - FORBIDDEN to load next step until C is selected
@@ -152,11 +149,9 @@ Present the user journey content for review, then display menu:
 - Ask if they'd like to refine further, get other perspectives, or proceed
 - Present menu options naturally as part of conversation
 
-Display: "**Select:** [A] Advanced Elicitation [P] Party Mode [C] Continue to Domain Requirements (Step 5 of 11)"
+Display: "**Select:** [C] Continue to Domain Requirements (Step 5 of 11)"
 
 #### Menu Handling Logic:
-- IF A: Read fully and follow: {advancedElicitationTask} with the current journey content, process the enhanced journey insights that come back, ask user "Accept these improvements to the user journeys? (y/n)", if yes update content with improvements then redisplay menu, if no keep original content then redisplay menu
-- IF P: Read fully and follow: {partyModeWorkflow} with the current journeys, process the collaborative journey improvements and additions, ask user "Accept these changes to the user journeys? (y/n)", if yes update content with improvements then redisplay menu, if no keep original content then redisplay menu
 - IF C: Append the final content to {outputFile}, update frontmatter by adding this step name to the end of the stepsCompleted array, then read fully and follow: {nextStepFile}
 - IF Any other: help user respond, then redisplay menu
 
@@ -177,7 +172,7 @@ When user selects 'C', append the content directly to the document using the str
 - Complete story-based journey mapping with emotional arc
 - Journey requirements clearly connected to capabilities needed
 - Minimum 3-4 compelling narrative journeys covering different user types
-- A/P/C menu presented and handled correctly
+- menu presented and handled correctly
 - Content properly appended to document when C selected
 
 ## FAILURE MODES:
@@ -189,7 +184,7 @@ When user selects 'C', append the content directly to the document using the str
 - Missing critical decision points and failure scenarios
 - Not connecting journeys to required capabilities
 - Not having enough journey diversity (admin, support, API, etc.)
-- Not presenting A/P/C menu after content generation
+- Not presenting menu after content generation
 - Appending content without user selecting 'C'
 
 **CRITICAL**: Reading only partial step file - leads to incomplete understanding and poor decisions
@@ -210,4 +205,4 @@ When user selects 'C', append the content directly to the document using the str
 
 After user selects 'C' and content is saved to document, load `step-05-domain.md`.
 
-Remember: Do NOT proceed to step-05 until user explicitly selects 'C' from the A/P/C menu and content is saved!
+Remember: Do NOT proceed to step-05 until user explicitly selects 'C' from the menu and content is saved!

@@ -45,6 +45,3 @@ The plugin reads from `_bmad/bmm/config.yaml` when available for:
 - `communication_language`, `document_output_language`
 - `user_skill_level`
 
-## Optional Dependencies
-
-Some advanced features (advanced elicitation, party mode) require BMAD core to be installed at `_bmad/core/`. The plugin works fully without these — they are marked as optional in step files.

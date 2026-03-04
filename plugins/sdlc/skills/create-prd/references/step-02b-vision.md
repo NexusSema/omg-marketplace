@@ -6,9 +6,6 @@ description: 'Discover the product vision and differentiator through collaborati
 nextStepFile: 'step-02c-executive-summary.md'
 outputFile: '{planning_artifacts}/prd.md'
 
-# Task References
-advancedElicitationTask: '{project-root}/_bmad/core/workflows/advanced-elicitation/workflow.xml # Optional: requires BMAD core'
-partyModeWorkflow: '{project-root}/_bmad/core/workflows/party-mode/workflow.md # Optional: requires BMAD core'
 ---
 
 # Step 2b: Product Vision Discovery
@@ -47,7 +44,7 @@ Discover what makes this product special and understand the product vision throu
 ## EXECUTION PROTOCOLS:
 
 - Show your analysis before taking any action
-- Present A/P/C menu after vision discovery is complete
+- Present menu after vision discovery is complete
 - Update frontmatter, adding this step to the end of the list of stepsCompleted
 - FORBIDDEN to load next step until C is selected
 
@@ -110,11 +107,9 @@ Present your understanding of the product vision for review, then display menu:
 
 **What would you like to do?**"
 
-Display: "**Select:** [A] Advanced Elicitation [P] Party Mode [C] Continue to Executive Summary (Step 2c of 13)"
+Display: "**Select:** [C] Continue to Executive Summary (Step 2c of 13)"
 
 #### Menu Handling Logic:
-- IF A: Read fully and follow: {advancedElicitationTask} with the current vision insights, process the enhanced insights that come back, ask user if they accept the improvements, if yes update understanding then redisplay menu, if no keep original understanding then redisplay menu
-- IF P: Read fully and follow: {partyModeWorkflow} with the current vision insights, process the collaborative insights, ask user if they accept the changes, if yes update understanding then redisplay menu, if no keep original understanding then redisplay menu
 - IF C: Update {outputFile} frontmatter by adding this step name to the end of stepsCompleted array, then read fully and follow: {nextStepFile}
 - IF Any other: help user respond, then redisplay menu
 

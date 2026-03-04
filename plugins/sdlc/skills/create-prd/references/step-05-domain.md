@@ -7,9 +7,6 @@ nextStepFile: 'step-06-innovation.md'
 outputFile: '{planning_artifacts}/prd.md'
 domainComplexityCSV: '${PLUGIN_ROOT}/skills/prd-standards/references/domain-complexity.csv'
 
-# Task References
-advancedElicitationTask: '{project-root}/_bmad/core/workflows/advanced-elicitation/workflow.xml # Optional: requires BMAD core'
-partyModeWorkflow: '{project-root}/_bmad/core/workflows/party-mode/workflow.md # Optional: requires BMAD core'
 ---
 
 # Step 5: Domain-Specific Requirements (Optional)
@@ -48,7 +45,7 @@ For complex domains only that have a mapping in {domainComplexityCSV}, explore d
 
 - Check domain complexity from step-02 classification first
 - If complexity is "low", offer to skip this step
-- Present A/P/C menu after domain requirements defined (or skipped)
+- Present menu after domain requirements defined (or skipped)
 - ONLY save when user chooses C (Continue)
 - Update output file frontmatter, adding this step name to the end of the list of stepsCompleted
 - FORBIDDEN to load next step until C is selected
@@ -151,11 +148,9 @@ Acknowledge the domain and explore what makes it complex:
 
 ### N. Present MENU OPTIONS
 
-Display: "**Select:** [A] Advanced Elicitation [P] Party Mode [C] Continue - Save and Proceed to Innovation (Step 6 of 13)"
+Display: "**Select:** [C] Continue - Save and Proceed to Innovation (Step 6 of 13)"
 
 #### Menu Handling Logic:
-- IF A: Read fully and follow: {advancedElicitationTask}, and when finished redisplay the menu
-- IF P: Read fully and follow: {partyModeWorkflow}, and when finished redisplay the menu
 - IF C: Save content to {outputFile}, update frontmatter, then read fully and follow: {nextStepFile}
 - IF Any other comments or queries: help user respond then [Redisplay Menu Options](#n-present-menu-options)
 

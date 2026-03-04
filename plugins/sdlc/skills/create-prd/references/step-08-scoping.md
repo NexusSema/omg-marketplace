@@ -6,9 +6,6 @@ description: 'Define MVP boundaries and prioritize features across development p
 nextStepFile: 'step-09-functional.md'
 outputFile: '{planning_artifacts}/prd.md'
 
-# Task References
-advancedElicitationTask: '{project-root}/_bmad/core/workflows/advanced-elicitation/workflow.xml # Optional: requires BMAD core'
-partyModeWorkflow: '{project-root}/_bmad/core/workflows/party-mode/workflow.md # Optional: requires BMAD core'
 ---
 
 # Step 8: Scoping Exercise - MVP & Future Features
@@ -31,7 +28,7 @@ partyModeWorkflow: '{project-root}/_bmad/core/workflows/party-mode/workflow.md #
 
 - Show your analysis before taking any action
 - Review the complete PRD document built so far
-- Present A/P/C menu after generating scoping decisions
+- Present menu after generating scoping decisions
 - ONLY save when user chooses C (Continue)
 - Update output file frontmatter, adding this step name to the end of the list of stepsCompleted
 - FORBIDDEN to load next step until C is selected
@@ -180,11 +177,9 @@ Present the scoping decisions for review, then display menu:
 - Ask if they'd like to refine further, get other perspectives, or proceed
 - Present menu options naturally as part of conversation
 
-Display: "**Select:** [A] Advanced Elicitation [P] Party Mode [C] Continue to Functional Requirements (Step 9 of 11)"
+Display: "**Select:** [C] Continue to Functional Requirements (Step 9 of 11)"
 
 #### Menu Handling Logic:
-- IF A: Read fully and follow: {advancedElicitationTask} with the current scoping analysis, process the enhanced insights that come back, ask user if they accept the improvements, if yes update content then redisplay menu, if no keep original content then redisplay menu
-- IF P: Read fully and follow: {partyModeWorkflow} with the scoping context, process the collaborative insights on MVP and roadmap decisions, ask user if they accept the changes, if yes update content then redisplay menu, if no keep original content then redisplay menu
 - IF C: Append the final content to {outputFile}, update frontmatter by adding this step name to the end of the stepsCompleted array, then read fully and follow: {nextStepFile}
 - IF Any other: help user respond, then redisplay menu
 
@@ -205,7 +200,7 @@ When user selects 'C', append the content directly to the document using the str
 - Phased development roadmap created
 - Key risks identified and mitigation strategies defined
 - User explicitly agrees to scope decisions
-- A/P/C menu presented and handled correctly
+- menu presented and handled correctly
 - Content properly appended to document when C selected
 
 ## FAILURE MODES:
@@ -215,7 +210,7 @@ When user selects 'C', append the content directly to the document using the str
 - Not getting explicit user agreement on MVP boundaries
 - Missing critical risk analysis
 - Not creating clear phased development approach
-- Not presenting A/P/C menu after content generation
+- Not presenting menu after content generation
 
 **CRITICAL**: Reading only partial step file - leads to incomplete understanding and poor decisions
 **CRITICAL**: Proceeding with 'C' without fully reading and understanding the next step file
@@ -225,4 +220,4 @@ When user selects 'C', append the content directly to the document using the str
 
 After user selects 'C' and content is saved to document, load {nextStepFile}.
 
-Remember: Do NOT proceed to step-09 until user explicitly selects 'C' from the A/P/C menu and content is saved!
+Remember: Do NOT proceed to step-09 until user explicitly selects 'C' from the menu and content is saved!

@@ -4,8 +4,6 @@ description: 'Document Discovery & Confirmation - Handle fresh context validatio
 
 # File references (ONLY variables used in this step)
 nextStepFile: 'step-v-02-format-detection.md'
-advancedElicitationTask: '{project-root}/_bmad/core/workflows/advanced-elicitation/workflow.xml # Optional: requires BMAD core'
-partyModeWorkflow: '{project-root}/_bmad/core/workflows/party-mode/workflow.md # Optional: requires BMAD core'
 prdPurpose: '${PLUGIN_ROOT}/skills/prd-standards/references/prd-purpose.md'
 ---
 
@@ -185,7 +183,7 @@ validationStatus: IN_PROGRESS
 
 ### 9. Present MENU OPTIONS
 
-Display: **Select an Option:** [A] Advanced Elicitation [P] Party Mode [C] Continue to Format Detection
+Display: **Select an Option:** [C] Continue to Format Detection
 
 #### EXECUTION RULES:
 
@@ -195,8 +193,6 @@ Display: **Select an Option:** [A] Advanced Elicitation [P] Party Mode [C] Conti
 
 #### Menu Handling Logic:
 
-- IF A: Read fully and follow: {advancedElicitationTask}, and when finished redisplay the menu
-- IF P: Read fully and follow: {partyModeWorkflow}, and when finished redisplay the menu
 - IF C: Read fully and follow: {nextStepFile} to begin format detection
 - IF user provides additional document: Load it, update report, redisplay summary
 - IF Any other: help user, then redisplay menu

@@ -9,9 +9,6 @@ outputFile: '{planning_artifacts}/prd.md'
 # Data Files
 projectTypesCSV: '${PLUGIN_ROOT}/skills/prd-standards/references/project-types.csv'
 
-# Task References
-advancedElicitationTask: '{project-root}/_bmad/core/workflows/advanced-elicitation/workflow.xml # Optional: requires BMAD core'
-partyModeWorkflow: '{project-root}/_bmad/core/workflows/party-mode/workflow.md # Optional: requires BMAD core'
 ---
 
 # Step 7: Project-Type Deep Dive
@@ -33,7 +30,7 @@ partyModeWorkflow: '{project-root}/_bmad/core/workflows/party-mode/workflow.md #
 ## EXECUTION PROTOCOLS:
 
 - Show your analysis before taking any action
-- Present A/P/C menu after generating project-type content
+- Present menu after generating project-type content
 - ONLY save when user chooses C (Continue)
 - Update output file frontmatter, adding this step name to the end of the list of stepsCompleted
 - FORBIDDEN to load next step until C is selected
@@ -169,11 +166,9 @@ Present the project-type content for review, then display menu:
 
 **What would you like to do?**"
 
-Display: "**Select:** [A] Advanced Elicitation [P] Party Mode [C] Continue to Scoping (Step 8 of 11)"
+Display: "**Select:** [C] Continue to Scoping (Step 8 of 11)"
 
 #### Menu Handling Logic:
-- IF A: Read fully and follow: {advancedElicitationTask} with the current project-type content, process the enhanced technical insights that come back, ask user "Accept these improvements to the technical requirements? (y/n)", if yes update content with improvements then redisplay menu, if no keep original content then redisplay menu
-- IF P: Read fully and follow: {partyModeWorkflow} with the current project-type requirements, process the collaborative technical expertise and validation, ask user "Accept these changes to the technical requirements? (y/n)", if yes update content with improvements then redisplay menu, if no keep original content then redisplay menu
 - IF C: Append the final content to {outputFile}, update frontmatter by adding this step name to the end of the stepsCompleted array, then read fully and follow: {nextStepFile}
 - IF Any other: help user respond, then redisplay menu
 
@@ -193,7 +188,7 @@ When user selects 'C', append the content directly to the document using the str
 - Required sections generated per CSV configuration
 - Skip sections properly avoided to save time
 - Technical requirements connected to product value
-- A/P/C menu presented and handled correctly
+- menu presented and handled correctly
 - Content properly appended to document when C selected
 
 ## FAILURE MODES:
@@ -203,7 +198,7 @@ When user selects 'C', append the content directly to the document using the str
 - Not generating required sections per CSV configuration
 - Documenting sections that should be skipped per CSV
 - Creating generic content without project-type specificity
-- Not presenting A/P/C menu after content generation
+- Not presenting menu after content generation
 - Appending content without user selecting 'C'
 
 **CRITICAL**: Reading only partial step file - leads to incomplete understanding and poor decisions
@@ -234,4 +229,4 @@ When user selects 'C', append the content directly to the document using the str
 
 After user selects 'C' and content is saved to document, load `{nextStepFile}` to define project scope.
 
-Remember: Do NOT proceed to step-08 (Scoping) until user explicitly selects 'C' from the A/P/C menu and content is saved!
+Remember: Do NOT proceed to step-08 (Scoping) until user explicitly selects 'C' from the menu and content is saved!

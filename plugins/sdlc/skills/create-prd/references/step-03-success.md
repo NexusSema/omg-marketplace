@@ -6,9 +6,6 @@ description: 'Define comprehensive success criteria covering user, business, and
 nextStepFile: 'step-04-journeys.md'
 outputFile: '{planning_artifacts}/prd.md'
 
-# Task References
-advancedElicitationTask: '{project-root}/_bmad/core/workflows/advanced-elicitation/workflow.xml # Optional: requires BMAD core'
-partyModeWorkflow: '{project-root}/_bmad/core/workflows/party-mode/workflow.md # Optional: requires BMAD core'
 ---
 
 # Step 3: Success Criteria Definition
@@ -30,7 +27,7 @@ partyModeWorkflow: '{project-root}/_bmad/core/workflows/party-mode/workflow.md #
 ## EXECUTION PROTOCOLS:
 
 - Show your analysis before taking any action
-- Present A/P/C menu after generating success criteria content
+- Present menu after generating success criteria content
 - ONLY save when user chooses C (Continue)
 - Update output file frontmatter, adding this step name to the end of the list of stepsCompleted
 - FORBIDDEN to load next step until C is selected
@@ -172,11 +169,9 @@ Present the success criteria content for user review, then display menu:
 - Ask if they'd like to refine further, get other perspectives, or proceed
 - Present menu options naturally as part of the conversation
 
-Display: "**Select:** [A] Advanced Elicitation [P] Party Mode [C] Continue to User Journey Mapping (Step 4 of 11)"
+Display: "**Select:** [C] Continue to User Journey Mapping (Step 4 of 11)"
 
 #### Menu Handling Logic:
-- IF A: Read fully and follow: {advancedElicitationTask} with the current success criteria content, process the enhanced success metrics that come back, ask user "Accept these improvements to the success criteria? (y/n)", if yes update content with improvements then redisplay menu, if no keep original content then redisplay menu
-- IF P: Read fully and follow: {partyModeWorkflow} with the current success criteria, process the collaborative improvements to metrics and scope, ask user "Accept these changes to the success criteria? (y/n)", if yes update content with improvements then redisplay menu, if no keep original content then redisplay menu
 - IF C: Append the final content to {outputFile}, update frontmatter by adding this step name to the end of the stepsCompleted array, then read fully and follow: {nextStepFile}
 - IF Any other: help user respond, then redisplay menu
 
@@ -195,7 +190,7 @@ When user selects 'C', append the content directly to the document using the str
 - Business success metrics defined with specific targets
 - Success criteria connected to product differentiator
 - Scope properly negotiated (MVP, Growth, Vision)
-- A/P/C menu presented and handled correctly
+- menu presented and handled correctly
 - Content properly appended to document when C selected
 
 ## FAILURE MODES:
@@ -204,7 +199,7 @@ When user selects 'C', append the content directly to the document using the str
 - Not connecting success criteria back to product differentiator
 - Missing scope negotiation and leaving it undefined
 - Generating content without real user input on what success looks like
-- Not presenting A/P/C menu after content generation
+- Not presenting menu after content generation
 - Appending content without user selecting 'C'
 
 **CRITICAL**: Reading only partial step file - leads to incomplete understanding and poor decisions
@@ -223,4 +218,4 @@ If working in regulated domains (healthcare, fintech, govtech):
 
 After user selects 'C' and content is saved to document, load `step-04-journeys.md` to map user journeys.
 
-Remember: Do NOT proceed to step-04 until user explicitly selects 'C' from the A/P/C menu and content is saved!
+Remember: Do NOT proceed to step-04 until user explicitly selects 'C' from the menu and content is saved!

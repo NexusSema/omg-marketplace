@@ -6,9 +6,6 @@ description: 'Generate and append the Executive Summary section to the PRD docum
 nextStepFile: 'step-03-success.md'
 outputFile: '{planning_artifacts}/prd.md'
 
-# Task References
-advancedElicitationTask: '{project-root}/_bmad/core/workflows/advanced-elicitation/workflow.xml # Optional: requires BMAD core'
-partyModeWorkflow: '{project-root}/_bmad/core/workflows/party-mode/workflow.md # Optional: requires BMAD core'
 ---
 
 # Step 2c: Executive Summary Generation
@@ -46,7 +43,7 @@ Generate the Executive Summary content using insights from classification (step 
 ## EXECUTION PROTOCOLS:
 
 - Show your analysis before taking any action
-- Present A/P/C menu after generating executive summary content
+- Present menu after generating executive summary content
 - ONLY save when user chooses C (Continue)
 - Update output file frontmatter, adding this step name to the end of the list of stepsCompleted
 - FORBIDDEN to load next step until C is selected
@@ -100,11 +97,9 @@ Present the executive summary content for user review, then display menu:
 
 "Here's the Executive Summary for your PRD. Review the content above and let me know what you'd like to do."
 
-Display: "**Select:** [A] Advanced Elicitation [P] Party Mode [C] Continue to Success Criteria (Step 3 of 13)"
+Display: "**Select:** [C] Continue to Success Criteria (Step 3 of 13)"
 
 #### Menu Handling Logic:
-- IF A: Read fully and follow: {advancedElicitationTask} with the current executive summary content, process the enhanced content that comes back, ask user if they accept the improvements, if yes update content then redisplay menu, if no keep original content then redisplay menu
-- IF P: Read fully and follow: {partyModeWorkflow} with the current executive summary content, process the collaborative improvements, ask user if they accept the changes, if yes update content then redisplay menu, if no keep original content then redisplay menu
 - IF C: Append the final content to {outputFile}, update frontmatter by adding this step name to the end of the stepsCompleted array, then read fully and follow: {nextStepFile}
 - IF Any other: help user respond, then redisplay menu
 
@@ -151,7 +146,7 @@ ONLY WHEN [C continue option] is selected and [content appended to document], wi
 - Draft presented to user for review before saving
 - User given opportunity to refine content
 - Content properly appended to document when C selected
-- A/P/C menu presented and handled correctly
+- menu presented and handled correctly
 - Frontmatter updated with stepsCompleted when C selected
 
 ### SYSTEM FAILURE:
@@ -160,7 +155,7 @@ ONLY WHEN [C continue option] is selected and [content appended to document], wi
 - Appending content without user selecting 'C'
 - Producing vague, fluffy, or low-density content
 - Not presenting draft for user review
-- Not presenting A/P/C menu after content generation
+- Not presenting menu after content generation
 - Skipping directly to next step without appending content
 
 **CRITICAL**: Reading only partial step file - leads to incomplete understanding and poor decisions

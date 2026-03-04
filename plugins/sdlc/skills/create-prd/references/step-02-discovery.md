@@ -10,9 +10,6 @@ outputFile: '{planning_artifacts}/prd.md'
 projectTypesCSV: '${PLUGIN_ROOT}/skills/prd-standards/references/project-types.csv'
 domainComplexityCSV: '${PLUGIN_ROOT}/skills/prd-standards/references/domain-complexity.csv'
 
-# Task References
-advancedElicitationTask: '{project-root}/_bmad/core/workflows/advanced-elicitation/workflow.xml # Optional: requires BMAD core'
-partyModeWorkflow: '{project-root}/_bmad/core/workflows/party-mode/workflow.md # Optional: requires BMAD core'
 ---
 
 # Step 2: Project Discovery
@@ -50,7 +47,7 @@ Discover and classify the project - understand what type of product this is, wha
 ## EXECUTION PROTOCOLS:
 
 - Show your analysis before taking any action
-- Present A/P/C menu after classification complete
+- Present menu after classification complete
 - ONLY save classification to frontmatter when user chooses C (Continue)
 - Update frontmatter, adding this step to the end of the list of stepsCompleted
 - FORBIDDEN to load next step until C is selected
@@ -182,11 +179,9 @@ Present the project classification for review, then display menu:
 
 **What would you like to do?**"
 
-Display: "**Select:** [A] Advanced Elicitation [P] Party Mode [C] Continue to Product Vision (Step 2b of 13)"
+Display: "**Select:** [C] Continue to Product Vision (Step 2b of 13)"
 
 #### Menu Handling Logic:
-- IF A: Read fully and follow: {advancedElicitationTask} with the current classification, process the enhanced insights that come back, ask user if they accept the improvements, if yes update classification then redisplay menu, if no keep original classification then redisplay menu
-- IF P: Read fully and follow: {partyModeWorkflow} with the current classification, process the collaborative insights, ask user if they accept the changes, if yes update classification then redisplay menu, if no keep original classification then redisplay menu
 - IF C: Save classification to {outputFile} frontmatter, add this step name to the end of stepsCompleted array, then read fully and follow: {nextStepFile}
 - IF Any other: help user respond, then redisplay menu
 

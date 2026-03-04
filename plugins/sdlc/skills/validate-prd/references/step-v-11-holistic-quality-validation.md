@@ -6,7 +6,6 @@ description: 'Holistic Quality Assessment - Assess PRD as cohesive, compelling d
 nextStepFile: 'step-v-12-completeness-validation.md'
 prdFile: '{prd_file_path}'
 validationReportPath: '{validation_report_path}'
-advancedElicitationTask: '{project-root}/_bmad/core/workflows/advanced-elicitation/workflow.xml # Optional: requires BMAD core'
 ---
 
 # Step 11: Holistic Quality Assessment
@@ -32,18 +31,18 @@ Assess the PRD as a cohesive, compelling document - evaluating document flow, du
 - We engage in systematic validation, not collaborative dialogue
 - You bring analytical rigor and document quality expertise
 - This step runs autonomously - no user input needed
-- Uses Advanced Elicitation for multi-perspective evaluation
+- Uses multi-perspective evaluation
 
 ### Step-Specific Rules:
 
 - Focus ONLY on holistic document quality assessment
 - FORBIDDEN to validate individual components (done in previous steps)
-- Approach: Multi-perspective evaluation using Advanced Elicitation
+- Approach: Multi-perspective evaluation
 - This is a validation sequence step - auto-proceeds when complete
 
 ## EXECUTION PROTOCOLS:
 
-- Use Advanced Elicitation for multi-perspective assessment
+- Use multi-perspective assessment
 - Evaluate document flow, dual audience, BMAD principles
 - Append comprehensive assessment to validation report
 - Display "Proceeding to next check..." and load next step
@@ -60,14 +59,16 @@ Assess the PRD as a cohesive, compelling document - evaluating document flow, du
 
 **CRITICAL:** Follow this sequence exactly. Do not skip, reorder, or improvise unless user explicitly requests a change.
 
-### 1. Attempt Sub-Process with Advanced Elicitation
+### 1. Multi-Perspective Evaluation
 
-**Try to use Task tool to spawn a subprocess using Advanced Elicitation:**
+**Perform holistic quality assessment on the PRD using multi-perspective evaluation:**
 
-"Perform holistic quality assessment on this PRD using multi-perspective evaluation:
-
-**Read fully and follow the Advanced Elicitation workflow:**
-{advancedElicitationTask}
+- Read complete PRD
+- Evaluate document flow, coherence, transitions
+- Assess dual audience effectiveness
+- Check BMAD principles compliance
+- Assign overall quality rating
+- Identify top 3 improvements
 
 **Evaluate the PRD from these perspectives:**
 
@@ -111,17 +112,6 @@ Rate the PRD on 5-point scale:
 
 **5. Top 3 Improvements:**
 Identify the 3 most impactful improvements to make this a great PRD
-
-Return comprehensive assessment with all perspectives, rating, and top 3 improvements."
-
-**Graceful degradation (if no Task tool or Advanced Elicitation unavailable):**
-- Perform holistic assessment directly in current context
-- Read complete PRD
-- Evaluate document flow, coherence, transitions
-- Assess dual audience effectiveness
-- Check BMAD principles compliance
-- Assign overall quality rating
-- Identify top 3 improvements
 
 ### 2. Synthesize Assessment
 
@@ -240,7 +230,7 @@ Without delay, read fully and follow: {nextStepFile} (step-v-12-completeness-val
 
 ### SUCCESS:
 
-- Advanced Elicitation used for multi-perspective evaluation (or graceful degradation)
+- Multi-perspective evaluation completed
 - Document flow & coherence assessed
 - Dual audience effectiveness evaluated (humans and LLMs)
 - BMAD PRD principles compliance checked
@@ -248,11 +238,10 @@ Without delay, read fully and follow: {nextStepFile} (step-v-12-completeness-val
 - Top 3 improvements identified
 - Comprehensive assessment reported to validation report
 - Auto-proceeds to next validation step
-- Subprocess attempted with graceful degradation
 
 ### SYSTEM FAILURE:
 
-- Not using Advanced Elicitation for multi-perspective evaluation
+- Not performing multi-perspective evaluation
 - Missing document flow assessment
 - Missing dual audience evaluation
 - Not checking all BMAD principles

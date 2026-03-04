@@ -7,9 +7,6 @@ nextStepFile: 'step-12-complete.md'
 outputFile: '{planning_artifacts}/prd.md'
 purposeFile: '${PLUGIN_ROOT}/skills/prd-standards/references/prd-purpose.md'
 
-# Task References
-advancedElicitationTask: '{project-root}/_bmad/core/workflows/advanced-elicitation/workflow.xml # Optional: requires BMAD core'
-partyModeWorkflow: '{project-root}/_bmad/core/workflows/party-mode/workflow.md # Optional: requires BMAD core'
 ---
 
 # Step 11: Document Polish
@@ -34,7 +31,7 @@ partyModeWorkflow: '{project-root}/_bmad/core/workflows/party-mode/workflow.md #
 - Reduce duplication while preserving essential info
 - Ensure proper ## Level 2 headers throughout
 - Save optimized document
-- Present A/P/C menu after polish
+- Present menu after polish
 - DO NOT skip review steps
 
 ## CONTEXT BOUNDARIES:
@@ -166,11 +163,9 @@ Present the polished document for review, then display menu:
 - Ask if they'd like to refine further, get other perspectives, or proceed
 - Present menu options naturally as part of conversation
 
-Display: "**Select:** [A] Advanced Elicitation [P] Party Mode [C] Continue to Complete PRD (Step 12 of 12)"
+Display: "**Select:** [C] Continue to Complete PRD (Step 12 of 12)"
 
 #### Menu Handling Logic:
-- IF A: Read fully and follow: {advancedElicitationTask} with the polished document, process the enhanced refinements that come back, ask user "Accept these polish improvements? (y/n)", if yes update content with improvements then redisplay menu, if no keep original polish then redisplay menu
-- IF P: Read fully and follow: {partyModeWorkflow} with the polished document, process the collaborative refinements to flow and coherence, ask user "Accept these polish changes? (y/n)", if yes update content with improvements then redisplay menu, if no keep original polish then redisplay menu
 - IF C: Save the polished document to {outputFile}, update frontmatter by adding this step name to the end of the stepsCompleted array, then read fully and follow: {nextStepFile}
 - IF Any other: help user respond, then redisplay menu
 
@@ -192,7 +187,7 @@ When user selects 'C', replace the entire document content with the polished ver
 - Transitions between sections are smooth
 - User's voice and intent preserved
 - Document is more readable and professional
-- A/P/C menu presented and handled correctly
+- menu presented and handled correctly
 - Polished document saved when C selected
 
 ## FAILURE MODES:
@@ -203,7 +198,7 @@ When user selects 'C', replace the entire document content with the polished ver
 - Changing content instead of improving presentation
 - Not ensuring ## Level 2 headers for main sections
 - Making arbitrary style changes instead of coherence improvements
-- Not presenting A/P/C menu for user approval
+- Not presenting menu for user approval
 - Saving polished document without user selecting 'C'
 
 **CRITICAL**: Reading only partial step file - leads to incomplete understanding and poor decisions
@@ -214,4 +209,4 @@ When user selects 'C', replace the entire document content with the polished ver
 
 After user selects 'C' and polished document is saved, load `step-12-complete.md` to complete the workflow.
 
-Remember: Do NOT proceed to step-12 until user explicitly selects 'C' from the A/P/C menu and polished document is saved!
+Remember: Do NOT proceed to step-12 until user explicitly selects 'C' from the menu and polished document is saved!

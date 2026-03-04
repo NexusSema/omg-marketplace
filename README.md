@@ -119,15 +119,6 @@ user_skill_level: "expert"
 
 All fields are optional. Without a config file, the plugin will prompt for what it needs.
 
-## Optional Dependencies
-
-Some workflow steps offer advanced features that require BMAD core:
-
-- **Advanced Elicitation** — deeper requirement discovery techniques
-- **Party Mode** — multi-agent brainstorming sessions
-
-These are clearly marked as optional in the step files. The plugin is fully functional without them.
-
 ## Roadmap
 
 The SDLC plugin will grow to cover the full software development lifecycle:

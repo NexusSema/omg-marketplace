@@ -6,9 +6,6 @@ description: 'Define quality attributes that matter for this specific product'
 nextStepFile: 'step-11-polish.md'
 outputFile: '{planning_artifacts}/prd.md'
 
-# Task References
-advancedElicitationTask: '{project-root}/_bmad/core/workflows/advanced-elicitation/workflow.xml # Optional: requires BMAD core'
-partyModeWorkflow: '{project-root}/_bmad/core/workflows/party-mode/workflow.md # Optional: requires BMAD core'
 ---
 
 # Step 10: Non-Functional Requirements
@@ -30,7 +27,7 @@ partyModeWorkflow: '{project-root}/_bmad/core/workflows/party-mode/workflow.md #
 ## EXECUTION PROTOCOLS:
 
 - Show your analysis before taking any action
-- Present A/P/C menu after generating NFR content
+- Present menu after generating NFR content
 - ONLY save when user chooses C (Continue)
 - Update output file frontmatter, adding this step name to the end of the list of stepsCompleted
 - FORBIDDEN to load next step until C is selected
@@ -165,11 +162,9 @@ Present the non-functional requirements for review, then display menu:
 - Ask if they'd like to refine further, get other perspectives, or proceed
 - Present menu options naturally as part of conversation
 
-Display: "**Select:** [A] Advanced Elicitation [P] Party Mode [C] Continue to Polish Document (Step 11 of 12)"
+Display: "**Select:** [C] Continue to Polish Document (Step 11 of 12)"
 
 #### Menu Handling Logic:
-- IF A: Read fully and follow: {advancedElicitationTask} with the current NFR content, process the enhanced quality attribute insights that come back, ask user if they accept the improvements, if yes update content then redisplay menu, if no keep original content then redisplay menu
-- IF P: Read fully and follow: {partyModeWorkflow} with the current NFR list, process the collaborative technical validation and additions, ask user if they accept the changes, if yes update content then redisplay menu, if no keep original content then redisplay menu
 - IF C: Append the final content to {outputFile}, update frontmatter by adding this step name to the end of the stepsCompleted array, then read fully and follow: {nextStepFile}
 - IF Any other: help user respond, then redisplay menu
 
@@ -189,7 +184,7 @@ When user selects 'C', append the content directly to the document using the str
 - NFRs connected to actual user needs and business context
 - Vague requirements converted to testable criteria
 - Domain-specific compliance requirements included if relevant
-- A/P/C menu presented and handled correctly
+- menu presented and handled correctly
 - Content properly appended to document when C selected
 
 ## FAILURE MODES:
@@ -199,7 +194,7 @@ When user selects 'C', append the content directly to the document using the str
 - Not connecting NFRs to actual user or business needs
 - Missing domain-specific compliance requirements
 - Creating overly prescriptive technical requirements
-- Not presenting A/P/C menu after content generation
+- Not presenting menu after content generation
 - Appending content without user selecting 'C'
 
 **CRITICAL**: Reading only partial step file - leads to incomplete understanding and poor decisions
@@ -239,4 +234,4 @@ When user selects 'C', append the content directly to the document using the str
 
 After user selects 'C' and content is saved to document, load {nextStepFile} to finalize the PRD and complete the workflow.
 
-Remember: Do NOT proceed to step-11 until user explicitly selects 'C' from the A/P/C menu and content is saved!
+Remember: Do NOT proceed to step-11 until user explicitly selects 'C' from the menu and content is saved!
