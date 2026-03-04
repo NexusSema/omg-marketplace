@@ -1,0 +1,14 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "om-nexus-official",
+  "description": "OM Nexus Official — SDLC automation plugins for BMAD-METHOD workflows",
+  "owner": { "name": "Hieutran" },
+  "plugins": [{
+    "name": "sdlc",
+    "description": "Interactive PRD workflows: create, validate, edit with BMAD methodology",
+    "version": "1.0.0",
+    "author": { "name": "Hieutran" },
+    "source": "./plugins/sdlc",
+    "category": "development"
+  }]
+}
