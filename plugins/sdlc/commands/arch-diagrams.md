@@ -1,10 +1,10 @@
 ---
-description: "Convert Mermaid diagrams from architecture shard documents into styled draw.io (.drawio) files with C4 conventions."
+description: "Generate styled draw.io (.drawio) files from architecture shard document content with C4 conventions."
 ---
 
 # Generate Architecture Diagrams
 
-You are starting the **Generate Architecture Diagrams** workflow — converting Mermaid diagrams from architecture shard documents into professionally styled draw.io `.drawio` files.
+You are starting the **Generate Architecture Diagrams** workflow — generating professionally styled draw.io `.drawio` files by analyzing the content of architecture shard documents directly. Do NOT rely on Mermaid code blocks — they are often messy and unreliable. Instead, read the prose, tables, and descriptions to design diagrams from scratch.
 
 ## Setup
 
@@ -32,23 +32,27 @@ You are starting the **Generate Architecture Diagrams** workflow — converting 
 
    "How would you like to generate diagrams?
 
-   **[A] Subagent (Recommended)** — Delegate to the c4-diagram-generator subagent for batch processing. All Mermaid diagrams are discovered, classified, and converted automatically. Returns a summary without polluting your main conversation context.
+   **[A] Subagent (Recommended)** — Delegate to the c4-diagram-generator subagent for batch processing. All documents are analyzed and diagrams generated automatically. Returns a summary without polluting your main conversation context.
 
-   **[B] Interactive** — Process diagrams one at a time in this conversation. You'll see each Mermaid block, its classification, and the generated draw.io XML before it's written. You can adjust or skip individual diagrams."
+   **[B] Interactive** — Process documents one at a time in this conversation. You'll see the identified diagram types and generated draw.io XML before it's written. You can adjust or skip individual diagrams."
 
 5. **Route Based on Choice**:
 
    - **If A (Subagent)**: Delegate to the `c4-diagram-generator` subagent with the shard document directory path. Present the returned summary table to the user.
 
    - **If B (Interactive)**: Load the `architecture/diagrams` skill. For each shard document:
-     1. Read the document and list all Mermaid blocks with their detected types
+     1. Read the document content and identify what diagrams should be generated based on the subject matter
      2. Ask the user which diagrams to generate (all, select by number, or skip)
      3. For each selected diagram:
-        - Show the Mermaid source and classified type
+        - Show the identified diagram type and the key entities/relationships extracted from the content
         - Generate the draw.io XML following the skill's conversion methodology
         - Write the `.drawio` file
-        - Report: filename, node count, edge count
-     4. After all documents are processed, show the summary table
+        - Run visual validation if draw.io CLI is available:
+          - Export to PNG at 2× scale
+          - Inspect the PNG for visual defects (see `references/visual-validation-guide.md`)
+          - If issues found, apply fixes and re-export (up to 3 iterations total)
+        - Report: filename, node count, edge count, Visual QA result
+     4. After all documents are processed, show the summary table (including Visual QA column)
 
 ## Important
 
@@ -56,5 +60,5 @@ You are starting the **Generate Architecture Diagrams** workflow — converting 
 - Interactive mode gives you control over which diagrams to generate and lets you review each one
 - Speak in the configured `{communication_language}`
 - Diagram labels should use `{document_output_language}`
-- If a shard document has no Mermaid blocks, skip it with a note
+- If a shard document has no diagrammable content (e.g., only comparison tables), skip it with a note
 - Generated `.drawio` files are placed in the same directory as the source shard documents

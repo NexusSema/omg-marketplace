@@ -1,12 +1,12 @@
 ---
 name: architecture/diagrams
-description: "Convert Mermaid diagrams from architecture shard documents into styled draw.io (.drawio) files with C4-appropriate shapes, colors, and layout"
+description: "Generate styled draw.io (.drawio) files from architecture shard document content with C4-appropriate shapes, colors, and layout"
 disable-model-invocation: true
 ---
 
 # C4 Diagram Generator Skill
 
-**Goal:** Convert Mermaid diagrams found in architecture shard documents (01-07) into properly styled draw.io `.drawio` files with C4 modeling conventions, correct XML structure, and professional layout.
+**Goal:** Generate professionally styled draw.io `.drawio` files from architecture shard documents (01-07) by analyzing the document content directly. Do NOT rely on Mermaid code blocks — instead, read and understand the prose, tables, and descriptions in each document to design appropriate diagrams with C4 modeling conventions, correct XML structure, and professional layout.
 
 ## Reference File Index
 
@@ -18,42 +18,47 @@ All reference files are located at `${PLUGIN_ROOT}/skills/architecture/diagrams/
 | `c4-color-palettes.md` | Color tables per diagram type (C4, Infrastructure, ERD, etc.) |
 | `layout-rules.md` | Spacing, dimensions, edge routing, font sizes, grid alignment |
 | `template-snippets.md` | Complete `<mxGraphModel>` XML templates per diagram type |
-| `mermaid-to-drawio-mapping.md` | Mapping: Mermaid syntax elements to draw.io XML equivalents |
+| `mermaid-to-drawio-mapping.md` | Reference for draw.io XML element patterns (legacy name, used as XML pattern reference) |
+| `visual-validation-guide.md` | Visual defect checklist, fix strategies, and iteration protocol for post-render QA |
 
 ## Conversion Methodology
 
-### Step 1 — Discover & Extract
+### Step 1 — Discover & Analyze
 
 1. Glob for `0[1-7]-*.md` files in the target directory
-2. Read each file and extract all ` ```mermaid ``` ` code blocks
-3. Record the source document number, block index, and any `%%` title comments
+2. Read each file's full content — prose, tables, lists, and descriptions
+3. Identify what diagrams should be generated based on the document's subject matter (see classification table below)
+4. **Ignore any existing Mermaid code blocks** — they are often messy and unreliable. Generate diagrams from the document's textual content instead.
 
 ### Step 2 — Classify Diagram Type
 
-Determine diagram type from Mermaid syntax:
+Determine diagram types based on the document's content and purpose:
 
-| Mermaid Directive | Diagram Type |
-|-------------------|-------------|
-| `C4Context` | C4 Context (Level 1) |
-| `C4Container` | C4 Container (Level 2) |
-| `C4Component` | C4 Component (Level 3) |
-| `sequenceDiagram` | Sequence Diagram |
-| `erDiagram` | Entity-Relationship Diagram |
-| `graph`/`flowchart` + infrastructure keywords | Infrastructure Topology |
-| `graph`/`flowchart` + network/zone keywords | Network Topology |
-| `stateDiagram` | State Machine |
-| `graph`/`flowchart` + CI/CD keywords | CI/CD Pipeline |
-| `graph`/`flowchart` (default) | Data Flow / Generic |
+| Document Subject | Diagram Type |
+|-----------------|-------------|
+| System overview, actors, external systems | C4 Context (Level 1) |
+| Application containers, services, databases | C4 Container (Level 2) |
+| Internal component breakdown | C4 Component (Level 3) |
+| Interaction flows, request/response sequences | Sequence Diagram |
+| Data models, entity relationships | Entity-Relationship Diagram |
+| Server infrastructure, cloud resources | Infrastructure Topology |
+| Network zones, firewalls, security boundaries | Network Topology |
+| Lifecycle states, transitions | State Machine |
+| Build/deploy pipelines | CI/CD Pipeline |
+| Data movement between systems | Data Flow |
 
-### Step 3 — Convert to draw.io XML
+A single document may warrant multiple diagrams. Identify all appropriate diagrams from the content.
 
-For each classified diagram:
+### Step 3 — Design & Convert to draw.io XML
 
-1. Load the template snippet for that diagram type from `references/template-snippets.md`
-2. Parse the Mermaid block to extract nodes, edges, subgraphs, labels, and relationships
-3. Map each element to draw.io XML using `references/c4-shape-definitions.md`
-4. Apply colors from `references/c4-color-palettes.md`
-5. Generate unique `id` attributes for every `mxCell`
+For each identified diagram:
+
+1. Extract the relevant entities, relationships, and labels from the document's prose and tables
+2. Design the diagram structure — determine nodes, edges, containers, and their labels
+3. Load the appropriate template from `references/template-snippets.md`
+4. Apply shapes from `references/c4-shape-definitions.md`
+5. Apply colors from `references/c4-color-palettes.md`
+6. Generate unique `id` attributes for every `mxCell`
 
 ### Step 4 — Layout
 
@@ -63,6 +68,19 @@ For each classified diagram:
 4. Ensure minimum 200px horizontal and 120px vertical spacing between nodes
 5. Align all coordinates to multiples of 10
 
+### Step 4.5 — Layout Planning
+
+Before generating coordinates, produce a brief layout plan for each diagram:
+
+1. Identify the primary flow direction (TB or LR) based on diagram type
+2. List node groups/clusters and how they should be spatially arranged
+3. Identify potential edge congestion points (nodes with many connections)
+4. Plan container nesting order (outer → inner)
+5. Estimate canvas size needed based on node count and spacing rules
+6. Note which edges may need waypoints to avoid crossings
+
+This plan is internal (not written to a file) — it guides the coordinate generation that follows.
+
 ### Step 5 — Write Output
 
 1. Write `.drawio` file alongside source documents
@@ -70,24 +88,37 @@ For each classified diagram:
    - Examples: `01-c4-context.drawio`, `04-seq-auth-flow.drawio`, `07-erd.drawio`
 3. If multiple diagrams of the same type exist in one document, append a sequence number: `04-seq-auth-flow-1.drawio`
 
-### Step 6 — Export (Optional)
+### Step 6 — Visual Validation & Refinement
 
-If draw.io CLI is available on the system, export to PNG:
-
-```bash
-drawio -x -f png -e -b 10 -o {name}.drawio.png {name}.drawio
-```
-
-Check availability with `which drawio` first. If not available, skip this step silently.
+1. Check draw.io CLI availability:
+   ```bash
+   which drawio || test -f /Applications/draw.io.app/Contents/MacOS/draw.io
+   ```
+2. If **not available** → skip visual validation, keep `.drawio` files as-is, mark Visual QA as `Skipped (no CLI)`
+3. If **available** → for each `.drawio` file:
+   a. Export to PNG at 2× scale for readable text:
+      ```bash
+      /Applications/draw.io.app/Contents/MacOS/draw.io -x -f png --scale 2 -b 10 -o {name}.drawio.png {name}.drawio
+      ```
+   b. Read the PNG using the `Read` tool to visually inspect it
+   c. Evaluate against the defect checklist from `references/visual-validation-guide.md`
+   d. If issues found AND iteration count < 3:
+      - Log the specific issues identified
+      - Apply fixes per the strategy guide in `references/visual-validation-guide.md`
+      - Re-write the `.drawio` file, re-export to PNG, re-inspect
+   e. If clean or max iterations (3) reached → proceed
+4. Keep final PNG files alongside `.drawio` files
 
 ### Step 7 — Summary
 
 Produce a summary table:
 
-| Source Doc | Diagram Type | Output File | Nodes | Edges |
-|-----------|-------------|-------------|-------|-------|
-| 01-high-level-design.md | C4 Context | 01-c4-context.drawio | 8 | 12 |
-| ... | ... | ... | ... | ... |
+| Source Doc | Diagram Type | Output File | Nodes | Edges | Visual QA |
+|-----------|-------------|-------------|-------|-------|-----------|
+| 01-high-level-design.md | C4 Context | 01-c4-context.drawio | 8 | 12 | Pass |
+| ... | ... | ... | ... | ... | ... |
+
+Visual QA column values: `Pass`, `Pass (N iterations)`, `Issues remaining: [desc]`, `Skipped (no CLI)`
 
 ## XML Rules (CRITICAL)
 
