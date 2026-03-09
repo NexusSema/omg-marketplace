@@ -21,6 +21,7 @@ The SDLC plugin provides interactive SDLC workflows using BMAD methodology. Work
 | Command | Description |
 |---------|------------|
 | `/sdlc:arch-create` | Create architecture decisions from a PRD (8-step interactive workflow) |
+| `/sdlc:arch-shard` | Shard a monolithic architecture into 7 focused sub-documents (8-step workflow) |
 | `/sdlc:arch-validate` | Validate architecture document against standards (subagent or interactive) |
 
 ### General
@@ -42,13 +43,14 @@ The SDLC plugin provides interactive SDLC workflows using BMAD methodology. Work
 **architecture/**
 - **architecture/standards** — Reference skill with architecture methodology, required sections, project types, and domain complexity data.
 - **architecture/create** — 8-step interactive workflow for creating architecture decisions from a PRD.
+- **architecture/shard** — 8-step workflow for decomposing a monolithic architecture document into 7 focused sub-documents with Mermaid diagrams, gap analysis, and cross-references.
 
 ### Subagents
 - **prd-validator** — Runs PRD validation in an isolated context using the prd/validate skill. Returns a structured report without polluting your main conversation. Used by `/sdlc:prd-validate` when subagent mode is selected.
 - **arch-validator** — Runs architecture validation in an isolated context. Checks required sections and structural quality. Used by `/sdlc:arch-validate` when subagent mode is selected.
 
 ### Hooks
-- **PostToolUse[Edit|Write]** — Automatically checks PRD format and architecture document format when you edit or write relevant files.
+- **PostToolUse[Edit|Write]** — Automatically checks PRD format, architecture document format, and shard document format when you edit or write relevant files.
 - **Stop** — Verifies workflow task completeness before ending.
 
 ## How It Works
@@ -70,7 +72,8 @@ skills/
 │   └── edit/               # 5-step edit workflow
 └── architecture/           # Architecture phase
     ├── standards/          # Architecture methodology + data
-    └── create/             # 8-step creation workflow
+    ├── create/             # 8-step creation workflow
+    └── shard/              # 8-step architecture sharding workflow
 ```
 
 ## Configuration

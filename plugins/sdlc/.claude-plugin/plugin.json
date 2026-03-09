@@ -1,4 +1,4 @@
 {
   "name": "sdlc",
-  "description": "Interactive SDLC workflows — PRD creation/validation/editing and architecture design using BMAD methodology with skills, subagents, hooks, and scripts."
+  "description": "Interactive SDLC workflows — PRD creation/validation/editing, architecture design, and architecture sharding using BMAD methodology with skills, subagents, hooks, and scripts."
 }
