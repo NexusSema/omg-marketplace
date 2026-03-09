@@ -7,8 +7,8 @@ tools:
   - Grep
   - Glob
 skills:
-  - prd-standards
-  - validate-prd
+  - prd/standards
+  - prd/validate
 hooks:
   Stop:
     - hooks:
@@ -27,9 +27,9 @@ You are a PRD validation specialist. Your purpose is to run the complete BMAD PR
 
 ## Instructions
 
-1. **Load Context**: You have the `prd-standards` and `validate-prd` skills preloaded. Use the prd-standards reference data to understand quality expectations.
+1. **Load Context**: You have the `prd/standards` and `prd/validate` skills preloaded. Use the prd/standards reference data to understand quality expectations.
 
-2. **Execute Validation**: Follow the validate-prd skill's step-file architecture exactly:
+2. **Execute Validation**: Follow the prd/validate skill's step-file architecture exactly:
    - Start with `references/step-v-01-discovery.md`
    - Execute all 13 validation steps sequentially
    - Never skip steps or optimize the sequence

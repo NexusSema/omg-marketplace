@@ -33,22 +33,22 @@ claude plugin add --from NexusSema/omg-marketplace sdlc
 
 ```bash
 # Create a PRD from scratch (12-step interactive workflow)
-/sdlc:create-prd
+/sdlc:prd-create
 
 # Validate an existing PRD against BMAD standards (13 checks)
-/sdlc:validate-prd
+/sdlc:prd-validate
 
 # Edit and improve an existing PRD (5-step workflow)
-/sdlc:edit-prd
+/sdlc:prd-edit
 ```
 
 ## What You Get
 
 | Command | What it does | Steps |
 |---------|-------------|-------|
-| `/sdlc:create-prd` | Build a PRD from scratch through collaborative discovery | 12 |
-| `/sdlc:validate-prd` | Audit a PRD against BMAD quality standards | 13 |
-| `/sdlc:edit-prd` | Improve an existing PRD with structured review | 5 |
+| `/sdlc:prd-create` | Build a PRD from scratch through collaborative discovery | 12 |
+| `/sdlc:prd-validate` | Audit a PRD against BMAD quality standards | 13 |
+| `/sdlc:prd-edit` | Improve an existing PRD with structured review | 5 |
 | `/sdlc:help` | Plugin documentation and architecture overview | — |
 
 Each workflow is **interactive** — Claude facilitates, you drive. Menus at every checkpoint let you advance, dig deeper, or adjust direction. No autonomous generation; every section gets your input and approval.
@@ -76,7 +76,7 @@ The plugin is designed to be lightweight at startup:
 
 | Component | Count | Startup Tokens |
 |-----------|-------|---------------|
-| Reference skill (prd-standards) | 1 | ~80 |
+| Reference skill (prd/standards) | 1 | ~80 |
 | Action skills (lazy-loaded) | 3 | 0 |
 | Subagent | 1 | 0 |
 | Hooks | 2 | 0 |
@@ -88,10 +88,12 @@ The plugin is designed to be lightweight at startup:
 ```
 plugins/sdlc/
 ├── skills/
-│   ├── prd-standards/        # Auto-loaded reference: BMAD methodology + data
-│   ├── create-prd/           # 12-step interactive PRD creation
-│   ├── validate-prd/         # 13-step PRD validation
-│   └── edit-prd/             # 5-step PRD editing
+│   ├── prd/                  # PRD phase
+│   │   ├── standards/        # Auto-loaded reference: BMAD methodology + data
+│   │   ├── create/           # 12-step interactive PRD creation
+│   │   ├── validate/         # 13-step PRD validation
+│   │   └── edit/             # 5-step PRD editing
+│   └── architecture/         # Architecture phase (coming soon)
 ├── agents/
 │   └── prd-validator.md      # Isolated validation subagent
 ├── commands/                 # User entry points (/sdlc:*)

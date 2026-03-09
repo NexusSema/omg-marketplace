@@ -53,7 +53,7 @@ Every functional requirement should link back to a user journey. Every user jour
 
 ## Create PRD Workflow (12 Steps)
 
-**Command:** `/sdlc:create-prd`
+**Command:** `/sdlc:prd-create`
 
 Creates a comprehensive PRD from scratch through guided, collaborative conversation. Claude acts as a PM facilitator — you bring the domain expertise and product vision.
 
@@ -91,13 +91,13 @@ A complete PRD at `{planning_artifacts}/prd.md` with:
 
 ## Validate PRD Workflow (13 Steps)
 
-**Command:** `/sdlc:validate-prd`
+**Command:** `/sdlc:prd-validate`
 
 Runs a comprehensive quality audit against an existing PRD. Can execute interactively in your conversation or delegate to an isolated subagent (recommended).
 
 ### Execution Modes
 
-When you run `/sdlc:validate-prd`, you're asked to choose:
+When you run `/sdlc:prd-validate`, you're asked to choose:
 
 - **Subagent (recommended)** — Delegates to the `prd-validator` subagent which runs all 13 checks in isolation, then returns a structured report. Keeps your main conversation clean.
 - **Interactive** — Runs each validation step directly in your conversation. You see each check's results and can interact during the process.
@@ -150,7 +150,7 @@ The report completion step offers:
 
 ## Edit PRD Workflow (5 Steps)
 
-**Command:** `/sdlc:edit-prd`
+**Command:** `/sdlc:prd-edit`
 
 Structured workflow for improving an existing PRD. Works with both BMAD-standard PRDs and legacy (non-standard) documents.
 
@@ -318,10 +318,10 @@ The `prd-validator` subagent runs the 13-step validation workflow in an isolated
 
 - **Model:** Sonnet (cost-effective for systematic checking)
 - **Tools:** Read, Grep, Glob only (read-only — diagnoses, doesn't fix)
-- **Skills:** Preloads `prd-standards` and `validate-prd`
+- **Skills:** Preloads `prd/standards` and `prd/validate`
 - **Own Stop hook:** Verifies all 13 steps completed and report has proper status
 
-**When to use it:** The subagent is the default choice when running `/sdlc:validate-prd`. It keeps your main conversation free of 13 steps of validation output. The structured report is returned cleanly at the end.
+**When to use it:** The subagent is the default choice when running `/sdlc:prd-validate`. It keeps your main conversation free of 13 steps of validation output. The structured report is returned cleanly at the end.
 
 **When to go interactive:** Choose interactive mode when you want to watch each validation check happen, ask questions during the process, or intervene mid-validation.
 

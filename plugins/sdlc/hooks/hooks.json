@@ -1,19 +1,31 @@
 {
   "hooks": {
-    "PostToolUse": [{
-      "matcher": "Edit|Write",
-      "hooks": [{
-        "type": "command",
-        "command": "${CLAUDE_PLUGIN_ROOT}/scripts/validate-prd-format.sh",
-        "async": true,
-        "timeout": 15,
-        "statusMessage": "Checking PRD format..."
-      }]
-    }],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [{
+          "type": "command",
+          "command": "${CLAUDE_PLUGIN_ROOT}/scripts/validate-prd-format.sh",
+          "async": true,
+          "timeout": 15,
+          "statusMessage": "Checking PRD format..."
+        }]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [{
+          "type": "command",
+          "command": "${CLAUDE_PLUGIN_ROOT}/scripts/validate-arch-format.sh",
+          "async": true,
+          "timeout": 15,
+          "statusMessage": "Checking architecture document format..."
+        }]
+      }
+    ],
     "Stop": [{
       "hooks": [{
         "type": "agent",
-        "prompt": "Check if the PRD workflow task is complete: 1) All requested steps were executed 2) Output files exist and are non-empty 3) No TODO/FIXME in modified PRD files. Return {\"ok\": true} or {\"ok\": false, \"reason\": \"...\"}.",
+        "prompt": "Check if the SDLC workflow task is complete: 1) All requested steps were executed 2) Output files (PRD or architecture documents) exist and are non-empty 3) No TODO/FIXME in modified PRD or architecture files. Return {\"ok\": true} or {\"ok\": false, \"reason\": \"...\"}.",
         "model": "haiku",
         "timeout": 60
       }]
