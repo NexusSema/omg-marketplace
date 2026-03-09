@@ -28,19 +28,44 @@ You are starting the **Generate Architecture Diagrams** workflow — generating 
 
 3. **Locate Shard Documents**: Ask the user for the directory containing the architecture shard documents (files named `01-*.md` through `07-*.md`). If `output_folder` and `planning_artifacts` are configured, suggest the default path: `{output_folder}/{planning_artifacts}/architecture/`.
 
-4. **Ask User Preference**:
+4. **Discover Shard Documents**:
+
+   Glob for `0[1-7]-*.md` files in the shard directory. List them to the user with their filenames.
+
+5. **Ask User Preference**:
 
    "How would you like to generate diagrams?
 
-   **[A] Subagent (Recommended)** — Delegate to the c4-diagram-generator subagent for batch processing. All documents are analyzed and diagrams generated automatically. Returns a summary without polluting your main conversation context.
+   **[A] Sequential** — Process one file at a time. A `c4-diagram-generator` subagent is spawned for each file sequentially. You see results per file before moving to the next. Good for reviewing output as it's produced.
 
-   **[B] Interactive** — Process documents one at a time in this conversation. You'll see the identified diagram types and generated draw.io XML before it's written. You can adjust or skip individual diagrams."
+   **[B] Parallel (Recommended)** — Fork a team of `c4-diagram-generator` subagents — one per file, all running simultaneously. Fastest option. Each subagent returns its own summary, which is combined into a final table.
 
-5. **Route Based on Choice**:
+   **[C] Interactive** — Process documents one at a time in this conversation. You'll see the identified diagram types and generated draw.io XML before it's written. You can adjust or skip individual diagrams."
 
-   - **If A (Subagent)**: Delegate to the `c4-diagram-generator` subagent with the shard document directory path. Present the returned summary table to the user.
+6. **Route Based on Choice**:
 
-   - **If B (Interactive)**: Load the `architecture/diagrams` skill. For each shard document:
+   - **If A (Sequential)**: For each shard document found in step 4:
+     1. Spawn a `c4-diagram-generator` subagent with the **single file path**
+     2. Wait for it to complete and present its summary table to the user
+     3. Ask user to continue to next file or stop
+     4. After all files, show combined summary table
+
+   - **If B (Parallel)**: Spawn **all** `c4-diagram-generator` subagents simultaneously — one per shard document file. Use **parallel Agent tool calls in a single message** so they run concurrently. Each subagent receives a single file path. After all complete, combine their summary tables into one final table and present to the user.
+
+     Example orchestration (for 6 files with diagrammable content):
+     ```
+     # All launched in a single message with parallel tool calls:
+     Agent(c4-diagram-generator, "Generate diagrams for path/to/01-high-level-design.md")
+     Agent(c4-diagram-generator, "Generate diagrams for path/to/03-detailed-design.md")
+     Agent(c4-diagram-generator, "Generate diagrams for path/to/04-sequence-diagrams.md")
+     Agent(c4-diagram-generator, "Generate diagrams for path/to/05-deployment-architecture.md")
+     Agent(c4-diagram-generator, "Generate diagrams for path/to/06-network-architecture.md")
+     Agent(c4-diagram-generator, "Generate diagrams for path/to/07-database-design.md")
+     ```
+
+     Skip files that are unlikely to produce diagrams (e.g. `02-tech-stack-vendor-assessment.md` which is typically tables only), but mention them in the summary as skipped.
+
+   - **If C (Interactive)**: Load the `architecture/diagrams` skill. For each shard document:
      1. Read the document content and identify what diagrams should be generated based on the subject matter
      2. Ask the user which diagrams to generate (all, select by number, or skip)
      3. For each selected diagram:
@@ -56,8 +81,9 @@ You are starting the **Generate Architecture Diagrams** workflow — generating 
 
 ## Important
 
-- The subagent option processes all diagrams in batch (recommended for most cases)
-- Interactive mode gives you control over which diagrams to generate and lets you review each one
+- Sequential mode gives you per-file review before proceeding
+- Parallel mode is fastest — spawns all subagents at once, each handling one file
+- Interactive mode gives you full control over which diagrams to generate and lets you review each one
 - Speak in the configured `{communication_language}`
 - Diagram labels should use `{document_output_language}`
 - If a shard document has no diagrammable content (e.g., only comparison tables), skip it with a note
