@@ -8,6 +8,8 @@ Checklist for verifying every output document has all required sections.
 - [ ] Table of contents
 - [ ] Source section references (heading paths back to source)
 - [ ] All diagrams in valid Mermaid syntax
+- [ ] No `<br>` or HTML tags in Mermaid diagram labels
+- [ ] No excessively wide diagrams (max 5 nodes per row, prefer TD over LR)
 - [ ] Gaps & Open Questions section
 - [ ] Cross-References section linking to related output docs
 - [ ] Self-contained — readable without source document

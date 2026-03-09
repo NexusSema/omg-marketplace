@@ -9,6 +9,8 @@ Standards for all Mermaid diagrams produced by the shard-architecture workflow.
 3. **Subgraphs for logical grouping** — group related components: `subgraph "Data Tier"`
 4. **Title comment** above every diagram: `%% Container Diagram — Platform API and its dependencies`
 5. **Syntactically valid** — must parse without error in Mermaid Live Editor
+6. **No HTML tags** — never use `<br>`, `<br/>`, or any HTML tags in node labels. Use `\n` inside double-quoted labels for line breaks if needed, or use a dash/parentheses separator (e.g. `"Service A (FastAPI)"`)
+7. **Width constraint** — prefer `graph TD`/`TB` (top-down) over `graph LR` to keep diagrams narrow and readable in VS Code's markdown preview. Limit to **max 5 nodes per row**. If a diagram has more than 5 parallel nodes, split into multiple rows using subgraph nesting or intermediate edges
 
 ## Diagram Types and Syntax
 
@@ -29,8 +31,8 @@ graph TD
 %% Container Diagram — {System Name} internal containers
 graph TD
     subgraph "System Boundary"
-        serviceA["Service A<br/>FastAPI"]
-        serviceB["Service B<br/>Next.js"]
+        serviceA["Service A (FastAPI)"]
+        serviceB["Service B (Next.js)"]
         database[("PostgreSQL")]
         cache[("Redis")]
     end
@@ -105,23 +107,23 @@ erDiagram
 graph TD
     subgraph "Kubernetes Cluster"
         subgraph "Namespace: platform"
-            apiDeploy["platform-api<br/>Deployment"]
-            apiSvc["platform-api<br/>Service"]
+            apiDeploy["platform-api (Deployment)"]
+            apiSvc["platform-api (Service)"]
         end
         subgraph "Namespace: data"
-            pgStateful["postgresql<br/>StatefulSet"]
+            pgStateful["postgresql (StatefulSet)"]
         end
     end
 
     apiSvc -->|"ClusterIP:5432"| pgStateful
 ```
 
-### Network Topology (graph LR)
+### Network Topology (graph TD)
 ```mermaid
 %% Network Topology — {Environment}
-graph LR
+graph TD
     subgraph "Public Zone"
-        lb["Load Balancer<br/>TLS Termination"]
+        lb["Load Balancer (TLS Termination)"]
     end
     subgraph "Application Zone"
         api["Platform API"]
