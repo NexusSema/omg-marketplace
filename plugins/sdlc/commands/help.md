@@ -23,6 +23,7 @@ The SDLC plugin provides interactive SDLC workflows using BMAD methodology. Work
 | `/sdlc:arch-create` | Create architecture decisions from a PRD (8-step interactive workflow) |
 | `/sdlc:arch-shard` | Shard a monolithic architecture into 7 focused sub-documents (8-step workflow) |
 | `/sdlc:arch-validate` | Validate architecture document against standards (subagent or interactive) |
+| `/sdlc:arch-diagrams` | Convert Mermaid diagrams from shard docs to styled draw.io files (subagent or interactive) |
 
 ### General
 
@@ -44,13 +45,15 @@ The SDLC plugin provides interactive SDLC workflows using BMAD methodology. Work
 - **architecture/standards** — Reference skill with architecture methodology, required sections, project types, and domain complexity data.
 - **architecture/create** — 8-step interactive workflow for creating architecture decisions from a PRD.
 - **architecture/shard** — 8-step workflow for decomposing a monolithic architecture document into 7 focused sub-documents with Mermaid diagrams, gap analysis, and cross-references.
+- **architecture/diagrams** — C4-to-draw.io conversion skill with shape definitions, color palettes, layout rules, XML templates, and Mermaid-to-draw.io mappings.
 
 ### Subagents
 - **prd-validator** — Runs PRD validation in an isolated context using the prd/validate skill. Returns a structured report without polluting your main conversation. Used by `/sdlc:prd-validate` when subagent mode is selected.
 - **arch-validator** — Runs architecture validation in an isolated context. Checks required sections and structural quality. Used by `/sdlc:arch-validate` when subagent mode is selected.
+- **c4-diagram-generator** — Converts Mermaid diagrams from shard documents into styled draw.io files with C4 shapes, colors, and layout. Used by `/sdlc:arch-diagrams` when subagent mode is selected.
 
 ### Hooks
-- **PostToolUse[Edit|Write]** — Automatically checks PRD format, architecture document format, and shard document format when you edit or write relevant files.
+- **PostToolUse[Edit|Write]** — Automatically checks PRD format, architecture document format, shard document format, and draw.io file format when you edit or write relevant files.
 - **Stop** — Verifies workflow task completeness before ending.
 
 ## How It Works
@@ -73,7 +76,8 @@ skills/
 └── architecture/           # Architecture phase
     ├── standards/          # Architecture methodology + data
     ├── create/             # 8-step creation workflow
-    └── shard/              # 8-step architecture sharding workflow
+    ├── shard/              # 8-step architecture sharding workflow
+    └── diagrams/           # C4-to-draw.io conversion skill + references
 ```
 
 ## Configuration

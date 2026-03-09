@@ -30,12 +30,22 @@
           "timeout": 15,
           "statusMessage": "Checking shard document format..."
         }]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [{
+          "type": "command",
+          "command": "${CLAUDE_PLUGIN_ROOT}/scripts/validate-drawio-format.sh",
+          "async": true,
+          "timeout": 15,
+          "statusMessage": "Checking draw.io file format..."
+        }]
       }
     ],
     "Stop": [{
       "hooks": [{
         "type": "agent",
-        "prompt": "Check if the SDLC workflow task is complete: 1) All requested steps were executed 2) Output files (PRD, architecture, or shard documents) exist and are non-empty 3) No TODO/FIXME in modified PRD, architecture, or shard files. Return {\"ok\": true} or {\"ok\": false, \"reason\": \"...\"}.",
+        "prompt": "Check if the SDLC workflow task is complete: 1) All requested steps were executed 2) Output files (PRD, architecture, shard documents, or diagram files) exist and are non-empty 3) No TODO/FIXME in modified PRD, architecture, or shard files. Return {\"ok\": true} or {\"ok\": false, \"reason\": \"...\"}.",
         "model": "haiku",
         "timeout": 60
       }]
