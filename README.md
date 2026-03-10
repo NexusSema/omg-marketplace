@@ -4,15 +4,69 @@ A Claude Code plugin that brings structured, interactive SDLC workflows to your 
 
 ## Install
 
-```bash
-claude plugin install --scope local sdlc
+### Claude Code (CLI or Desktop)
+
+1. **Add the marketplace:**
+
+   ```
+   /plugin marketplace add NexusSema/omg-marketplace
+   ```
+
+2. **Install the plugin:**
+
+   ```
+   /plugin install sdlc@om-nexus-official
+   ```
+
+   You can choose the installation scope:
+
+   | Scope | Command | Who sees it |
+   |-------|---------|-------------|
+   | User (default) | `/plugin install sdlc@om-nexus-official` | You, in all projects |
+   | Project (shared) | `/plugin install sdlc@om-nexus-official --scope project` | Anyone who clones the repo |
+   | Local (private) | `/plugin install sdlc@om-nexus-official --scope local` | You, in this project only |
+
+3. **Verify:**
+
+   ```
+   /sdlc:help
+   ```
+
+### Cowork (Desktop)
+
+1. Click **"Customize"** in the left sidebar, then **"Browse plugins"**
+2. Go to the **"Personal"** tab
+3. Search for `NexusSema/omg-marketplace` to add the marketplace
+4. Install the **sdlc** plugin from the marketplace listing
+
+Alternatively, you can configure it at the project level so it loads automatically for all collaborators. Add to your repository's `.claude/settings.json`:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "om-nexus-official": {
+      "source": {
+        "source": "github",
+        "repo": "NexusSema/omg-marketplace"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "sdlc@om-nexus-official": true
+  }
+}
 ```
 
-### Verify installation
+Commit and push — anyone opening the project in Cowork will be prompted to install the plugin.
 
-```bash
-# Should list sdlc commands
-/sdlc:help
+### Managing the Plugin
+
+```
+/plugin update sdlc@om-nexus-official      # Update to latest version
+/plugin disable sdlc@om-nexus-official     # Disable without removing
+/plugin enable sdlc@om-nexus-official      # Re-enable
+/plugin uninstall sdlc@om-nexus-official   # Remove completely
+/reload-plugins                             # Apply changes without restarting
 ```
 
 ## Usage
@@ -27,7 +81,10 @@ claude plugin install --scope local sdlc
 /sdlc:arch-create       # Create architecture decisions from a PRD (8-step workflow)
 /sdlc:arch-shard        # Shard architecture into 7 focused sub-documents (8-step workflow)
 /sdlc:arch-validate     # Validate architecture document against standards
-/sdlc:arch-diagrams     # Convert Mermaid diagrams to styled draw.io files
+/sdlc:arch-diagrams     # Generate draw.io diagrams from architecture shard documents
+
+# Epics & Stories
+/sdlc:epics-create      # Break requirements into epics and user stories (4-step workflow)
 
 # General
 /sdlc:help              # Plugin documentation and architecture overview
@@ -50,7 +107,13 @@ claude plugin install --scope local sdlc
 | `/sdlc:arch-create` | Create architecture decisions from a PRD | 8 |
 | `/sdlc:arch-shard` | Decompose monolithic architecture into 7 sub-documents with Mermaid diagrams | 8 |
 | `/sdlc:arch-validate` | Validate architecture document against BMAD standards (subagent or interactive) | — |
-| `/sdlc:arch-diagrams` | Convert Mermaid diagrams from shard docs to styled draw.io C4 files (subagent or interactive) | — |
+| `/sdlc:arch-diagrams` | Generate draw.io C4 diagrams from shard doc content (sequential, parallel, or interactive) | — |
+
+### Epics & Stories
+
+| Command | What it does | Steps |
+|---------|-------------|-------|
+| `/sdlc:epics-create` | Break PRD/Architecture/UX requirements into user-value-focused epics with detailed stories | 4 |
 
 ### General
 
@@ -87,23 +150,21 @@ plugins/sdlc/
 │   │   ├── create/             # 12-step interactive PRD creation
 │   │   ├── validate/           # 13-step PRD validation
 │   │   └── edit/               # 5-step PRD editing
-│   └── architecture/           # Architecture phase
-│       ├── standards/          # Architecture methodology + data
-│       ├── create/             # 8-step architecture creation
-│       ├── shard/              # 8-step architecture sharding
-│       └── diagrams/           # C4-to-draw.io conversion + references
+│   ├── architecture/           # Architecture phase
+│   │   ├── standards/          # Architecture methodology + data
+│   │   ├── create/             # 8-step architecture creation
+│   │   ├── shard/              # 8-step architecture sharding
+│   │   └── diagrams/           # draw.io generation + visual validation references
+│   └── epics/                  # Epics & Stories phase
+│       └── create/             # 4-step epic and story creation
 ├── agents/
 │   ├── prd-validator.md        # Isolated PRD validation subagent
 │   ├── arch-validator.md       # Isolated architecture validation subagent
-│   └── c4-diagram-generator.md # Mermaid-to-draw.io batch conversion subagent
+│   └── c4-diagram-generator.md # draw.io diagram generation subagent (single file)
 ├── commands/                   # User entry points (/sdlc:*)
 ├── hooks/                      # PostToolUse + Stop quality checks
 └── scripts/                    # Format validation scripts (PRD, arch, shard, draw.io)
 ```
-
-## Documentation
-
-- **[PRD Workflows — Detailed Guide](docs/prd-workflows.md)** — Step-by-step breakdown of all three PRD workflows, what each step does, quality standards, and configuration options.
 
 ## Configuration
 
@@ -123,12 +184,10 @@ All fields are optional. Without a config file, the plugin will prompt for what 
 
 ## Roadmap
 
-The SDLC plugin will grow to cover the full software development lifecycle:
-
 - [x] **PRD Workflows** — Create, validate, edit
 - [x] **Architecture** — Design, shard, validate, C4 diagram generation
+- [x] **Epics & Stories** — Requirements decomposition into implementable work
 - [ ] **UX Design** — Interaction flows, design specs
-- [ ] **Epic & Story Breakdown** — From requirements to implementable work
 - [ ] **Sprint Planning** — Sprint generation and status tracking
 - [ ] **Implementation** — Story-driven development workflows
 - [ ] **QA & Code Review** — Automated quality gates
