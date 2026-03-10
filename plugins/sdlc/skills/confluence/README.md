@@ -1,8 +1,8 @@
 # Confluence Skill for Claude Code
 
-A Claude Code skill that lets you manage Confluence pages at `onemount.atlassian.net` using plain language — no manual `curl` commands needed.
+A Claude Code skill that lets you manage Confluence pages using plain language — no manual `curl` commands needed.
 
-> **Requires:** Claude Code CLI installed and authenticated.
+> **Requires:** Claude Code CLI installed and authenticated. Part of the SDLC plugin (`/sdlc:confluence`).
 
 ---
 
@@ -26,8 +26,9 @@ The skill reads credentials from your shell profile at runtime. Add these two li
 **Windows (WSL):** `~/.bashrc` inside your WSL distro
 
 ```bash
-export ATLASSIAN_EMAIL="john.doe@onemount.com"
+export ATLASSIAN_EMAIL="your.email@company.com"
 export ATLASSIAN_API_TOKEN="your_token_here"
+export ATLASSIAN_INSTANCE="yourcompany.atlassian.net"  # optional, defaults to onemount.atlassian.net
 ```
 
 After editing, reload the file (or restart your terminal):
@@ -49,49 +50,31 @@ source ~/.bashrc
 
 ---
 
-## 3. Install the Skill
-
-Copy the skill folder into your Claude skills directory:
-
-```bash
-cp -r confluence ~/.claude/skills/
-```
-
-Restart Claude Code (or open a new session) — the skill loads automatically.
-
----
-
-## 4. Verify It Works
+## 3. Verify It Works
 
 Run this in your terminal to confirm the credentials are correct:
 
 ```bash
-ATLASSIAN_EMAIL="john.doe@onemount.com"
-ATLASSIAN_API_TOKEN="$(grep ATLASSIAN_API_TOKEN ~/.zshrc | head -1 | sed 's/.*=\"//;s/\"//')"
-
 curl -s -u "$ATLASSIAN_EMAIL:$ATLASSIAN_API_TOKEN" \
-  "https://onemount.atlassian.net/wiki/api/v2/spaces?limit=1" \
+  "https://${ATLASSIAN_INSTANCE:-onemount.atlassian.net}/wiki/api/v2/spaces?limit=1" \
   | python3 -c "import json,sys; d=json.load(sys.stdin); print('Connected:', d['results'][0]['name'])"
 ```
 
-Expected output:
-```
-Connected: FDP
-```
+Expected output: `Connected: <your space name>`
 
-If you see `401 Unauthorized`, double-check the token value in `~/.zshrc`.
+If you see `401 Unauthorized`, double-check the token and email in your shell profile.
 
 ---
 
-## 5. What You Can Do
+## 4. What You Can Do
 
-Once the skill is active, just describe what you want in Claude Code. No slash commands needed — the skill triggers automatically.
+Use `/sdlc:confluence` to start the workflow, or just describe what you want — the skill triggers automatically when you mention Confluence pages or paste URLs.
 
 ### Fetch & Edit a Page
 
 Paste a Confluence URL and tell Claude what to change:
 
-> "Fetch this page and update section 3 with the new requirements: https://onemount.atlassian.net/wiki/spaces/FDP/pages/3711631361/My-Page"
+> "Fetch this page and update section 3 with the new requirements: https://yourcompany.atlassian.net/wiki/spaces/PROJ/pages/123456789/My-Page"
 
 Claude will:
 1. Extract the page ID from the URL
@@ -103,7 +86,7 @@ Claude will:
 
 ### List Pages in a Space
 
-> "List all pages in the FDP Confluence space"
+> "List all pages in a Confluence space"
 
 Returns a table of page IDs and titles.
 
@@ -113,13 +96,13 @@ Returns a table of page IDs and titles.
 
 > "Find the Confluence page about the AI Agent Platform PRD"
 
-Uses CQL (Confluence Query Language) to search by title within the FDP space.
+Uses CQL (Confluence Query Language) to search by title within a space.
 
 ---
 
 ### Create a New Page
 
-> "Create a new Confluence page under the FDP space called 'Sprint 12 Retrospective' with a template for wins, blockers, and action items"
+> "Create a new Confluence page called 'Sprint 12 Retrospective' with a template for wins, blockers, and action items"
 
 Claude will build and POST the page, then return the new page ID and URL.
 
@@ -141,24 +124,17 @@ Claude will ask for confirmation before deleting.
 
 ---
 
-## 6. Local File Workflow
+## 5. Local File Workflow
 
 When Claude fetches a page, it saves the content as Confluence storage XHTML in your workspace:
 
 ```
-atlassian/
-└── Confluence/
-    ├── push_page.sh         ← push script (auto-increments version)
-    ├── My-Page.html         ← fetched page (editable)
-    └── ...
+Confluence/
+├── My-Page.html         ← fetched page (editable)
+└── ...
 ```
 
-You can also edit `.html` files manually in VSCode, then push back with:
-
-```bash
-cd atlassian/Confluence
-./push_page.sh My-Page.html 3711631361 "Updated section 3"
-```
+You can also edit `.html` files manually in VSCode, then push back via the `/sdlc:confluence` Push option.
 
 **Tip:** Install the **Live Preview** VSCode extension (`ms-vscode.live-server`) and right-click any `.html` file → **Show Preview** to see a live render before pushing.
 
@@ -171,7 +147,7 @@ cd atlassian/Confluence
 | `401 Unauthorized` | Token is wrong or expired — regenerate at `id.atlassian.com` |
 | `400 Bad Request` on update | The `status: "current"` field is missing from payload (handled automatically by `push_page.sh`) |
 | `curl: command not found` | Install curl: `brew install curl` |
-| Skill doesn't trigger | Restart Claude Code to reload skills |
+| Skill doesn't trigger | Run `/sdlc:confluence` or restart Claude Code |
 | Wrong version number on push | Always use `push_page.sh` — it fetches the current version first |
 
 ---
@@ -180,5 +156,5 @@ cd atlassian/Confluence
 
 - **API version:** Always v2 (`/wiki/api/v2`) — v1 returns 401 on this instance
 - **Exception:** CQL search uses the v1 endpoint (`/wiki/rest/api/content/search`) — this is intentional
-- **Default space:** FDP — all searches and listings scope to FDP unless you specify otherwise
+- **Default space:** Searches scope to the space you specify
 - **Storage format:** Confluence pages use XHTML storage format — edit with standard HTML tags (`<p>`, `<h1>`, `<ul>`, `<table>`) plus Confluence macros (`<ac:structured-macro>`)

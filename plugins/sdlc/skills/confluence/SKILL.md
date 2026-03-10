@@ -16,14 +16,24 @@ You are working in an Atlassian PM workspace. Confluence is managed entirely via
 
 ## Auth
 
-Credentials are stored in `~/.zshrc` but are NOT available in non-login shells. Always read them inline:
+Credentials and instance URL are read from environment variables. Users must set these in their shell profile (see README for setup):
 
 ```bash
-ATLASSIAN_EMAIL="john.doe@onemount.com"
-ATLASSIAN_API_TOKEN="$(grep ATLASSIAN_API_TOKEN ~/.zshrc | head -1 | sed 's/.*=\"//;s/\"//')"
+# Read credentials from environment (set in ~/.zshrc, ~/.bashrc, etc.)
+ATLASSIAN_EMAIL="${ATLASSIAN_EMAIL}"
+ATLASSIAN_API_TOKEN="${ATLASSIAN_API_TOKEN}"
+ATLASSIAN_INSTANCE="${ATLASSIAN_INSTANCE:-onemount.atlassian.net}"
 ```
 
-- Base URL: `https://onemount.atlassian.net/wiki/api/v2`
+If the env vars are not available in the subprocess, fall back to reading from the shell profile:
+
+```bash
+ATLASSIAN_EMAIL="${ATLASSIAN_EMAIL:-$(grep 'export ATLASSIAN_EMAIL' ~/.zshrc ~/.bashrc ~/.bash_profile 2>/dev/null | head -1 | sed 's/.*=\"//;s/\".*//')}"
+ATLASSIAN_API_TOKEN="${ATLASSIAN_API_TOKEN:-$(grep 'export ATLASSIAN_API_TOKEN' ~/.zshrc ~/.bashrc ~/.bash_profile 2>/dev/null | head -1 | sed 's/.*=\"//;s/\".*//')}"
+ATLASSIAN_INSTANCE="${ATLASSIAN_INSTANCE:-$(grep 'export ATLASSIAN_INSTANCE' ~/.zshrc ~/.bashrc ~/.bash_profile 2>/dev/null | head -1 | sed 's/.*=\"//;s/\".*//' || echo 'onemount.atlassian.net')}"
+```
+
+- Base URL: `https://${ATLASSIAN_INSTANCE}/wiki/api/v2`
 - Auth header: `-u "$ATLASSIAN_EMAIL:$ATLASSIAN_API_TOKEN"`
 - **Always use v2 API** — v1 (`/wiki/rest/api`) returns 401
 
@@ -32,9 +42,9 @@ ATLASSIAN_API_TOKEN="$(grep ATLASSIAN_API_TOKEN ~/.zshrc | head -1 | sed 's/.*=\
 When the user pastes a Confluence URL, the page ID is the numeric segment:
 
 ```
-https://onemount.atlassian.net/wiki/spaces/myproject/pages/3711631361/Page+Title
-                                                      ^^^^^^^^^^^
-                                                      This is the page ID
+https://{instance}/wiki/spaces/myproject/pages/3711631361/Page+Title
+                                               ^^^^^^^^^^^
+                                               This is the page ID
 ```
 
 ---
@@ -48,13 +58,14 @@ Use when the user shares a Confluence URL or page ID and wants to view or edit i
 **Step 1 — Fetch and save locally:**
 
 ```bash
-ATLASSIAN_EMAIL="john.doe@onemount.com"
-ATLASSIAN_API_TOKEN="$(grep ATLASSIAN_API_TOKEN ~/.zshrc | head -1 | sed 's/.*=\"//;s/\"//')"
+ATLASSIAN_EMAIL="${ATLASSIAN_EMAIL:-$(grep 'export ATLASSIAN_EMAIL' ~/.zshrc ~/.bashrc 2>/dev/null | head -1 | sed 's/.*=\"//;s/\".*//')}"
+ATLASSIAN_API_TOKEN="${ATLASSIAN_API_TOKEN:-$(grep 'export ATLASSIAN_API_TOKEN' ~/.zshrc ~/.bashrc 2>/dev/null | head -1 | sed 's/.*=\"//;s/\".*//')}"
+ATLASSIAN_INSTANCE="${ATLASSIAN_INSTANCE:-$(grep 'export ATLASSIAN_INSTANCE' ~/.zshrc ~/.bashrc 2>/dev/null | head -1 | sed 's/.*=\"//;s/\".*//' || echo 'onemount.atlassian.net')}"
 PAGE_ID="<id>"
 SLUG="<descriptive-slug>"  # e.g. PRD-AI-Agent-Platform or Functional-Requirements
 
 curl -s -u "$ATLASSIAN_EMAIL:$ATLASSIAN_API_TOKEN" \
-  "https://onemount.atlassian.net/wiki/api/v2/pages/$PAGE_ID?body-format=storage" \
+  "https://$ATLASSIAN_INSTANCE/wiki/api/v2/pages/$PAGE_ID?body-format=storage" \
   | python3 -c "
 import json, sys
 d = json.load(sys.stdin)
@@ -77,22 +88,22 @@ Edit the `.html` file directly using the Edit tool. Confluence storage format is
 **Step 3 — Push back:**
 
 ```bash
-cd <workspace>/Confluence
-./push_page.sh <slug>.html <PAGE_ID> "brief description of changes"
+${CLAUDE_PLUGIN_ROOT}/scripts/push-confluence-page.sh Confluence/<slug>.html <PAGE_ID> "brief description of changes"
 ```
 
-The `push_page.sh` script handles version incrementing automatically.
+The push script handles version incrementing automatically.
 
 ---
 
 ### 2. List Pages in a Space
 
 ```bash
-ATLASSIAN_EMAIL="john.doe@onemount.com"
-ATLASSIAN_API_TOKEN="$(grep ATLASSIAN_API_TOKEN ~/.zshrc | head -1 | sed 's/.*=\"//;s/\"//')"
+ATLASSIAN_EMAIL="${ATLASSIAN_EMAIL:-$(grep 'export ATLASSIAN_EMAIL' ~/.zshrc ~/.bashrc 2>/dev/null | head -1 | sed 's/.*=\"//;s/\".*//')}"
+ATLASSIAN_API_TOKEN="${ATLASSIAN_API_TOKEN:-$(grep 'export ATLASSIAN_API_TOKEN' ~/.zshrc ~/.bashrc 2>/dev/null | head -1 | sed 's/.*=\"//;s/\".*//')}"
+ATLASSIAN_INSTANCE="${ATLASSIAN_INSTANCE:-$(grep 'export ATLASSIAN_INSTANCE' ~/.zshrc ~/.bashrc 2>/dev/null | head -1 | sed 's/.*=\"//;s/\".*//' || echo 'onemount.atlassian.net')}"
 
 curl -s -u "$ATLASSIAN_EMAIL:$ATLASSIAN_API_TOKEN" \
-  "https://onemount.atlassian.net/wiki/api/v2/spaces/<spaceId>/pages?limit=50" \
+  "https://$ATLASSIAN_INSTANCE/wiki/api/v2/spaces/<spaceId>/pages?limit=50" \
   | python3 -c "
 import json, sys
 d = json.load(sys.stdin)
@@ -108,11 +119,12 @@ To get the spaceId for your confluence, use the List Spaces command below first.
 ### 3. List Spaces
 
 ```bash
-ATLASSIAN_EMAIL="john.doe@onemount.com"
-ATLASSIAN_API_TOKEN="$(grep ATLASSIAN_API_TOKEN ~/.zshrc | head -1 | sed 's/.*=\"//;s/\"//')"
+ATLASSIAN_EMAIL="${ATLASSIAN_EMAIL:-$(grep 'export ATLASSIAN_EMAIL' ~/.zshrc ~/.bashrc 2>/dev/null | head -1 | sed 's/.*=\"//;s/\".*//')}"
+ATLASSIAN_API_TOKEN="${ATLASSIAN_API_TOKEN:-$(grep 'export ATLASSIAN_API_TOKEN' ~/.zshrc ~/.bashrc 2>/dev/null | head -1 | sed 's/.*=\"//;s/\".*//')}"
+ATLASSIAN_INSTANCE="${ATLASSIAN_INSTANCE:-$(grep 'export ATLASSIAN_INSTANCE' ~/.zshrc ~/.bashrc 2>/dev/null | head -1 | sed 's/.*=\"//;s/\".*//' || echo 'onemount.atlassian.net')}"
 
 curl -s -u "$ATLASSIAN_EMAIL:$ATLASSIAN_API_TOKEN" \
-  "https://onemount.atlassian.net/wiki/api/v2/spaces" \
+  "https://$ATLASSIAN_INSTANCE/wiki/api/v2/spaces" \
   | python3 -c "
 import json, sys
 d = json.load(sys.stdin)
@@ -128,12 +140,13 @@ for s in d.get('results', []):
 Use CQL (Confluence Query Language) to search by title or content. Note: search uses the v1 endpoint (the v2 search endpoint is not fully available).
 
 ```bash
-ATLASSIAN_EMAIL="john.doe@onemount.com"
-ATLASSIAN_API_TOKEN="$(grep ATLASSIAN_API_TOKEN ~/.zshrc | head -1 | sed 's/.*=\"//;s/\"//')"
+ATLASSIAN_EMAIL="${ATLASSIAN_EMAIL:-$(grep 'export ATLASSIAN_EMAIL' ~/.zshrc ~/.bashrc 2>/dev/null | head -1 | sed 's/.*=\"//;s/\".*//')}"
+ATLASSIAN_API_TOKEN="${ATLASSIAN_API_TOKEN:-$(grep 'export ATLASSIAN_API_TOKEN' ~/.zshrc ~/.bashrc 2>/dev/null | head -1 | sed 's/.*=\"//;s/\".*//')}"
+ATLASSIAN_INSTANCE="${ATLASSIAN_INSTANCE:-$(grep 'export ATLASSIAN_INSTANCE' ~/.zshrc ~/.bashrc 2>/dev/null | head -1 | sed 's/.*=\"//;s/\".*//' || echo 'onemount.atlassian.net')}"
 QUERY="<search term>"
 
 curl -s -u "$ATLASSIAN_EMAIL:$ATLASSIAN_API_TOKEN" \
-  "https://onemount.atlassian.net/wiki/rest/api/content/search?cql=space=space+AND+title+~+\"$QUERY\"&limit=10" \
+  "https://$ATLASSIAN_INSTANCE/wiki/rest/api/content/search?cql=space=space+AND+title+~+\"$QUERY\"&limit=10" \
   | python3 -c "
 import json, sys
 d = json.load(sys.stdin)
@@ -148,7 +161,7 @@ for r in d.get('results', []):
 
 ```bash
 curl -s -u "$ATLASSIAN_EMAIL:$ATLASSIAN_API_TOKEN" \
-  "https://onemount.atlassian.net/wiki/api/v2/pages/<id>/children" \
+  "https://$ATLASSIAN_INSTANCE/wiki/api/v2/pages/<id>/children" \
   | python3 -c "
 import json, sys
 d = json.load(sys.stdin)
@@ -164,8 +177,9 @@ for p in d.get('results', []):
 Build the payload and POST it:
 
 ```bash
-ATLASSIAN_EMAIL="john.doe@onemount.com"
-ATLASSIAN_API_TOKEN="$(grep ATLASSIAN_API_TOKEN ~/.zshrc | head -1 | sed 's/.*=\"//;s/\"//')"
+ATLASSIAN_EMAIL="${ATLASSIAN_EMAIL:-$(grep 'export ATLASSIAN_EMAIL' ~/.zshrc ~/.bashrc 2>/dev/null | head -1 | sed 's/.*=\"//;s/\".*//')}"
+ATLASSIAN_API_TOKEN="${ATLASSIAN_API_TOKEN:-$(grep 'export ATLASSIAN_API_TOKEN' ~/.zshrc ~/.bashrc 2>/dev/null | head -1 | sed 's/.*=\"//;s/\".*//')}"
+ATLASSIAN_INSTANCE="${ATLASSIAN_INSTANCE:-$(grep 'export ATLASSIAN_INSTANCE' ~/.zshrc ~/.bashrc 2>/dev/null | head -1 | sed 's/.*=\"//;s/\".*//' || echo 'onemount.atlassian.net')}"
 
 python3 -c "
 import json
@@ -186,7 +200,7 @@ curl -s -u "$ATLASSIAN_EMAIL:$ATLASSIAN_API_TOKEN" \
   -X POST \
   -H "Content-Type: application/json" \
   -d @/tmp/cf_create.json \
-  "https://onemount.atlassian.net/wiki/api/v2/pages" \
+  "https://$ATLASSIAN_INSTANCE/wiki/api/v2/pages" \
   | python3 -c "
 import json, sys
 d = json.load(sys.stdin)
@@ -207,7 +221,7 @@ Always confirm with the user before deleting.
 ```bash
 curl -s -u "$ATLASSIAN_EMAIL:$ATLASSIAN_API_TOKEN" \
   -X DELETE \
-  "https://onemount.atlassian.net/wiki/api/v2/pages/<id>"
+  "https://$ATLASSIAN_INSTANCE/wiki/api/v2/pages/<id>"
 ```
 
 ---
@@ -222,9 +236,8 @@ curl -s -u "$ATLASSIAN_EMAIL:$ATLASSIAN_API_TOKEN" \
 
 ## Key Facts
 
-- Default Jira/Confluence project: <user need to specify their confluence space here>
-- Instance: `onemount.atlassian.net`
-- Local workspace: `<workspace>/Confluence/` (wherever the user's atlassian folder lives)
-- Push script: `./push_page.sh <file.html> <page_id> "message"` (auto-increments version)
+- Instance: configured via `$ATLASSIAN_INSTANCE` env var (defaults to `onemount.atlassian.net`)
+- Local workspace: `Confluence/` in the project root
+- Push script: `${CLAUDE_PLUGIN_ROOT}/scripts/push-confluence-page.sh <file.html> <page_id> "message"` (auto-increments version)
 - Storage format is XHTML — edit with standard HTML tags
 - `status: "current"` is required in update payloads — omitting it returns 400

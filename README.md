@@ -87,6 +87,9 @@ Commit and push — anyone opening the project in Cowork will be prompted to ins
 /sdlc:epics-create      # Break requirements into epics and user stories (4-step workflow)
 /sdlc:epics-gaps        # Find implementation gaps in epics/stories (6-step workflow)
 
+# Confluence
+/sdlc:confluence        # Fetch, edit, push, search, create Confluence pages
+
 # General
 /sdlc:help              # Plugin documentation and architecture overview
 ```
@@ -116,6 +119,14 @@ Commit and push — anyone opening the project in Cowork will be prompted to ins
 |---------|-------------|-------|
 | `/sdlc:epics-create` | Break PRD/Architecture/UX requirements into user-value-focused epics with detailed stories | 4 |
 | `/sdlc:epics-gaps` | Analyze epics/stories for implementation gaps — missing infra, dependencies, cross-cutting concerns | 6 |
+
+### Confluence
+
+| Command | What it does |
+|---------|-------------|
+| `/sdlc:confluence` | Manage Confluence pages — fetch, edit, push, search, create, delete |
+
+The Confluence skill also auto-triggers when you paste a Confluence URL or mention Confluence pages in conversation.
 
 ### General
 
@@ -157,16 +168,19 @@ plugins/sdlc/
 │   │   ├── create/             # 8-step architecture creation
 │   │   ├── shard/              # 8-step architecture sharding
 │   │   └── diagrams/           # draw.io generation + visual validation references
-│   └── epics/                  # Epics & Stories phase
-│       ├── create/             # 4-step epic and story creation
-│       └── gaps-analysis/      # 6-step implementation gaps analysis
+│   ├── epics/                  # Epics & Stories phase
+│   │   ├── create/             # 4-step epic and story creation
+│   │   └── gaps-analysis/      # 6-step implementation gaps analysis
+│   └── confluence/             # Confluence page management via REST API
 ├── agents/
 │   ├── prd-validator.md        # Isolated PRD validation subagent
 │   ├── arch-validator.md       # Isolated architecture validation subagent
 │   └── c4-diagram-generator.md # draw.io diagram generation subagent (single file)
 ├── commands/                   # User entry points (/sdlc:*)
 ├── hooks/                      # PostToolUse + Stop quality checks
-└── scripts/                    # Format validation scripts (PRD, arch, shard, draw.io)
+├── scripts/                    # Format validation + push scripts
+│   └── push-confluence-page.sh # Push local XHTML back to Confluence (auto-version)
+└── .claude-plugin/             # Plugin manifest
 ```
 
 ## Configuration
@@ -185,11 +199,24 @@ user_skill_level: "expert"
 
 All fields are optional. Without a config file, the plugin will prompt for what it needs.
 
+### Confluence (Environment Variables)
+
+The Confluence skill requires these environment variables in your shell profile (`~/.zshrc`, `~/.bashrc`, etc.):
+
+```bash
+export ATLASSIAN_EMAIL="your.email@company.com"
+export ATLASSIAN_API_TOKEN="your_api_token_here"
+export ATLASSIAN_INSTANCE="yourcompany.atlassian.net"  # optional, defaults to onemount.atlassian.net
+```
+
+To get an API token: go to [id.atlassian.com/manage-profile/security/api-tokens](https://id.atlassian.com/manage-profile/security/api-tokens), create a token, and add it to your shell profile. Then `source ~/.zshrc` (or restart your terminal).
+
 ## Roadmap
 
 - [x] **PRD Workflows** — Create, validate, edit
 - [x] **Architecture** — Design, shard, validate, C4 diagram generation
 - [x] **Epics & Stories** — Requirements decomposition and implementation gaps analysis
+- [x] **Confluence** — Page management, SDLC artifact push/pull
 - [ ] **UX Design** — Interaction flows, design specs
 - [ ] **Sprint Planning** — Sprint generation and status tracking
 - [ ] **Implementation** — Story-driven development workflows

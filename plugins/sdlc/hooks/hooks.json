@@ -40,6 +40,16 @@
           "timeout": 15,
           "statusMessage": "Checking draw.io file format..."
         }]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [{
+          "type": "command",
+          "command": "${CLAUDE_PLUGIN_ROOT}/scripts/validate-confluence-xhtml.sh",
+          "async": true,
+          "timeout": 15,
+          "statusMessage": "Checking Confluence XHTML format..."
+        }]
       }
     ],
     "Stop": [{
