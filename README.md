@@ -85,6 +85,7 @@ Commit and push — anyone opening the project in Cowork will be prompted to ins
 
 # Epics & Stories
 /sdlc:epics-create      # Break requirements into epics and user stories (4-step workflow)
+/sdlc:epics-gaps        # Find implementation gaps in epics/stories (6-step workflow)
 
 # General
 /sdlc:help              # Plugin documentation and architecture overview
@@ -114,6 +115,7 @@ Commit and push — anyone opening the project in Cowork will be prompted to ins
 | Command | What it does | Steps |
 |---------|-------------|-------|
 | `/sdlc:epics-create` | Break PRD/Architecture/UX requirements into user-value-focused epics with detailed stories | 4 |
+| `/sdlc:epics-gaps` | Analyze epics/stories for implementation gaps — missing infra, dependencies, cross-cutting concerns | 6 |
 
 ### General
 
@@ -156,7 +158,8 @@ plugins/sdlc/
 │   │   ├── shard/              # 8-step architecture sharding
 │   │   └── diagrams/           # draw.io generation + visual validation references
 │   └── epics/                  # Epics & Stories phase
-│       └── create/             # 4-step epic and story creation
+│       ├── create/             # 4-step epic and story creation
+│       └── gaps-analysis/      # 6-step implementation gaps analysis
 ├── agents/
 │   ├── prd-validator.md        # Isolated PRD validation subagent
 │   ├── arch-validator.md       # Isolated architecture validation subagent
@@ -186,7 +189,7 @@ All fields are optional. Without a config file, the plugin will prompt for what 
 
 - [x] **PRD Workflows** — Create, validate, edit
 - [x] **Architecture** — Design, shard, validate, C4 diagram generation
-- [x] **Epics & Stories** — Requirements decomposition into implementable work
+- [x] **Epics & Stories** — Requirements decomposition and implementation gaps analysis
 - [ ] **UX Design** — Interaction flows, design specs
 - [ ] **Sprint Planning** — Sprint generation and status tracking
 - [ ] **Implementation** — Story-driven development workflows
