@@ -25,6 +25,28 @@ The SDLC plugin provides interactive SDLC workflows using BMAD methodology. Work
 | `/sdlc:arch-validate` | Validate architecture document against standards (subagent or interactive) |
 | `/sdlc:arch-diagrams` | Convert Mermaid diagrams from shard docs to styled draw.io files (subagent or interactive) |
 
+### Epics & Stories
+
+| Command | Description |
+|---------|------------|
+| `/sdlc:epics-create` | Break PRD/Architecture/UX requirements into epics with detailed stories (4-step workflow) |
+| `/sdlc:epics-gaps` | Analyze epics/stories for implementation gaps — missing infra, dependencies, cross-cutting concerns (6-step workflow) |
+
+### Spec (Technical Specifications)
+
+| Command | Description |
+|---------|------------|
+| `/sdlc:spec-create` | Create a technical specification from scratch (5-step interactive workflow) |
+| `/sdlc:spec-edit` | Edit and improve an existing specification |
+| `/sdlc:spec-review` | Review a specification for consistency, contamination, and completeness (subagent or interactive) |
+| `/sdlc:spec-propagate` | Propagate changes across related specification documents |
+
+### Confluence
+
+| Command | Description |
+|---------|------------|
+| `/sdlc:confluence` | Fetch, edit, push, search, create Confluence pages |
+
 ### General
 
 | Command | Description |
@@ -47,13 +69,21 @@ The SDLC plugin provides interactive SDLC workflows using BMAD methodology. Work
 - **architecture/shard** — 8-step workflow for decomposing a monolithic architecture document into 7 focused sub-documents with Mermaid diagrams, gap analysis, and cross-references.
 - **architecture/diagrams** — C4-to-draw.io conversion skill with shape definitions, color palettes, layout rules, XML templates, and Mermaid-to-draw.io mappings.
 
+**spec/**
+- **spec/standards** — Reference skill with specification methodology, contamination patterns, consistency rules, and report templates.
+- **spec/create** — 5-step interactive workflow for creating technical specifications from scratch.
+- **spec/edit** — Workflow for editing and improving existing specifications.
+- **spec/review** — Review methodology for checking consistency, contamination, and completeness.
+- **spec/propagate** — Cross-document change propagation with impact analysis.
+
 ### Subagents
 - **prd-validator** — Runs PRD validation in an isolated context using the prd/validate skill. Returns a structured report without polluting your main conversation. Used by `/sdlc:prd-validate` when subagent mode is selected.
 - **arch-validator** — Runs architecture validation in an isolated context. Checks required sections and structural quality. Used by `/sdlc:arch-validate` when subagent mode is selected.
 - **c4-diagram-generator** — Converts Mermaid diagrams from shard documents into styled draw.io files with C4 shapes, colors, and layout. Used by `/sdlc:arch-diagrams` when subagent mode is selected.
+- **spec-reviewer** — Reviews specifications for consistency, contamination, and completeness in an isolated context. Returns a structured findings report. Used by `/sdlc:spec-review` when subagent mode is selected.
 
 ### Hooks
-- **PostToolUse[Edit|Write]** — Automatically checks PRD format, architecture document format, shard document format, and draw.io file format when you edit or write relevant files.
+- **PostToolUse[Edit|Write]** — Automatically checks PRD format, architecture document format, shard document format, draw.io file format, Confluence XHTML format, and spec format when you edit or write relevant files.
 - **Stop** — Verifies workflow task completeness before ending.
 
 ## How It Works
@@ -73,11 +103,21 @@ skills/
 │   ├── create/             # 12-step creation workflow
 │   ├── validate/           # 13-step validation workflow
 │   └── edit/               # 5-step edit workflow
-└── architecture/           # Architecture phase
-    ├── standards/          # Architecture methodology + data
-    ├── create/             # 8-step creation workflow
-    ├── shard/              # 8-step architecture sharding workflow
-    └── diagrams/           # C4-to-draw.io conversion skill + references
+├── architecture/           # Architecture phase
+│   ├── standards/          # Architecture methodology + data
+│   ├── create/             # 8-step creation workflow
+│   ├── shard/              # 8-step architecture sharding workflow
+│   └── diagrams/           # C4-to-draw.io conversion skill + references
+├── epics/                  # Epics & Stories phase
+│   ├── create/             # 4-step epic and story creation
+│   └── gaps-analysis/      # 6-step implementation gaps analysis
+├── spec/                   # Technical Specifications phase
+│   ├── standards/          # Spec methodology + contamination patterns
+│   ├── create/             # 5-step spec creation workflow
+│   ├── edit/               # Spec editing workflow
+│   ├── review/             # Review methodology + report template
+│   └── propagate/          # Cross-document change propagation
+└── confluence/             # Confluence page management
 ```
 
 ## Configuration

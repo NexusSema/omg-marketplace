@@ -87,6 +87,12 @@ Commit and push — anyone opening the project in Cowork will be prompted to ins
 /sdlc:epics-create      # Break requirements into epics and user stories (4-step workflow)
 /sdlc:epics-gaps        # Find implementation gaps in epics/stories (6-step workflow)
 
+# Spec (Technical Specifications)
+/sdlc:spec-create       # Create a technical specification (5-step interactive workflow)
+/sdlc:spec-edit         # Edit and improve an existing specification
+/sdlc:spec-review       # Review a spec for consistency, contamination, completeness
+/sdlc:spec-propagate    # Propagate changes across related spec documents
+
 # Confluence
 /sdlc:confluence        # Fetch, edit, push, search, create Confluence pages
 
@@ -119,6 +125,15 @@ Commit and push — anyone opening the project in Cowork will be prompted to ins
 |---------|-------------|-------|
 | `/sdlc:epics-create` | Break PRD/Architecture/UX requirements into user-value-focused epics with detailed stories | 4 |
 | `/sdlc:epics-gaps` | Analyze epics/stories for implementation gaps — missing infra, dependencies, cross-cutting concerns | 6 |
+
+### Spec (Technical Specifications)
+
+| Command | What it does | Steps |
+|---------|-------------|-------|
+| `/sdlc:spec-create` | Create a technical specification from scratch through collaborative discovery | 5 |
+| `/sdlc:spec-edit` | Edit and improve an existing specification | — |
+| `/sdlc:spec-review` | Review a specification for consistency, contamination, and completeness (subagent or interactive) | — |
+| `/sdlc:spec-propagate` | Propagate changes across related specification documents with impact analysis | — |
 
 ### Confluence
 
@@ -171,11 +186,18 @@ plugins/sdlc/
 │   ├── epics/                  # Epics & Stories phase
 │   │   ├── create/             # 4-step epic and story creation
 │   │   └── gaps-analysis/      # 6-step implementation gaps analysis
+│   ├── spec/                   # Technical Specifications phase
+│   │   ├── standards/          # Spec methodology + contamination patterns
+│   │   ├── create/             # 5-step spec creation workflow
+│   │   ├── edit/               # Spec editing workflow
+│   │   ├── review/             # Review methodology + report template
+│   │   └── propagate/          # Cross-document change propagation
 │   └── confluence/             # Confluence page management via REST API
 ├── agents/
 │   ├── prd-validator.md        # Isolated PRD validation subagent
 │   ├── arch-validator.md       # Isolated architecture validation subagent
-│   └── c4-diagram-generator.md # draw.io diagram generation subagent (single file)
+│   ├── c4-diagram-generator.md # draw.io diagram generation subagent (single file)
+│   └── spec-reviewer.md       # Isolated spec review subagent
 ├── commands/                   # User entry points (/sdlc:*)
 ├── hooks/                      # PostToolUse + Stop quality checks
 ├── scripts/                    # Format validation + push scripts
@@ -216,6 +238,7 @@ To get an API token: go to [id.atlassian.com/manage-profile/security/api-tokens]
 - [x] **PRD Workflows** — Create, validate, edit
 - [x] **Architecture** — Design, shard, validate, C4 diagram generation
 - [x] **Epics & Stories** — Requirements decomposition and implementation gaps analysis
+- [x] **Technical Specifications** — Create, edit, review, and cross-document change propagation
 - [x] **Confluence** — Page management, SDLC artifact push/pull
 - [ ] **UX Design** — Interaction flows, design specs
 - [ ] **Sprint Planning** — Sprint generation and status tracking

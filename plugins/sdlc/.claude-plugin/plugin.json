@@ -1,4 +1,4 @@
 {
   "name": "sdlc",
-  "description": "Interactive SDLC workflows — PRD creation/validation/editing, architecture design, architecture sharding, and C4 diagram generation using BMAD methodology with skills, subagents, hooks, and scripts."
+  "description": "Interactive SDLC workflows — PRD, architecture, epics, technical specifications, and Confluence management using BMAD methodology with skills, subagents, hooks, and scripts."
 }
