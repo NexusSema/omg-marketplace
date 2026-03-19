@@ -13,7 +13,7 @@ Load the `confluence` skill for API reference, auth patterns, and workflow instr
 1. **Verify credentials** — Check that the required environment variables are available:
    - `ATLASSIAN_EMAIL` — Atlassian account email
    - `ATLASSIAN_API_TOKEN` — API token from id.atlassian.com
-   - `ATLASSIAN_INSTANCE` — Atlassian instance hostname (optional, defaults to `onemount.atlassian.net`)
+   - `ATLASSIAN_INSTANCE` — Atlassian instance hostname (optional, defaults to `yourcompany.atlassian.net`)
 
    If not set, tell the user to configure them (see README).
 

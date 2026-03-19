@@ -1,0 +1,12 @@
+{
+  "hooks": {
+    "Stop": [{
+      "hooks": [{
+        "type": "agent",
+        "prompt": "Check if the scrum master task is complete: 1) The requested Jira or Confluence sync operation was executed 2) Results were confirmed (issue key/URL for Jira, page URL for Confluence sync) 3) No pending operations remain. Return {\"ok\": true} or {\"ok\": false, \"reason\": \"...\"}.",
+        "model": "haiku",
+        "timeout": 60
+      }]
+    }]
+  }
+}

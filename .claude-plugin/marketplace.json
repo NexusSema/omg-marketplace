@@ -10,5 +10,12 @@
     "author": { "name": "Hieutran" },
     "source": "./plugins/sdlc",
     "category": "development"
+  }, {
+    "name": "scrum-master",
+    "description": "Scrum master toolkit — Jira issue tracking, sprint management, and bidirectional markdown-to-Confluence sync",
+    "version": "1.0.0",
+    "author": { "name": "Hieutran" },
+    "source": "./plugins/scrum-master",
+    "category": "development"
   }]
 }

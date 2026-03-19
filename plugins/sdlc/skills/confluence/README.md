@@ -28,7 +28,7 @@ The skill reads credentials from your shell profile at runtime. Add these two li
 ```bash
 export ATLASSIAN_EMAIL="your.email@company.com"
 export ATLASSIAN_API_TOKEN="your_token_here"
-export ATLASSIAN_INSTANCE="yourcompany.atlassian.net"  # optional, defaults to onemount.atlassian.net
+export ATLASSIAN_INSTANCE="yourcompany.atlassian.net"  # optional, defaults to yourcompany.atlassian.net
 ```
 
 After editing, reload the file (or restart your terminal):
@@ -56,7 +56,7 @@ Run this in your terminal to confirm the credentials are correct:
 
 ```bash
 curl -s -u "$ATLASSIAN_EMAIL:$ATLASSIAN_API_TOKEN" \
-  "https://${ATLASSIAN_INSTANCE:-onemount.atlassian.net}/wiki/api/v2/spaces?limit=1" \
+  "https://${ATLASSIAN_INSTANCE:-yourcompany.atlassian.net}/wiki/api/v2/spaces?limit=1" \
   | python3 -c "import json,sys; d=json.load(sys.stdin); print('Connected:', d['results'][0]['name'])"
 ```
 

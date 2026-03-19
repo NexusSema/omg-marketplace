@@ -228,7 +228,7 @@ The Confluence skill requires these environment variables in your shell profile 
 ```bash
 export ATLASSIAN_EMAIL="your.email@company.com"
 export ATLASSIAN_API_TOKEN="your_api_token_here"
-export ATLASSIAN_INSTANCE="yourcompany.atlassian.net"  # optional, defaults to onemount.atlassian.net
+export ATLASSIAN_INSTANCE="yourcompany.atlassian.net"  # optional, defaults to yourcompany.atlassian.net
 ```
 
 To get an API token: go to [id.atlassian.com/manage-profile/security/api-tokens](https://id.atlassian.com/manage-profile/security/api-tokens), create a token, and add it to your shell profile. Then `source ~/.zshrc` (or restart your terminal).

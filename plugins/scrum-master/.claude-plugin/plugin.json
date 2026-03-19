@@ -1,0 +1,4 @@
+{
+  "name": "scrum-master",
+  "description": "Scrum master toolkit — Jira issue tracking, sprint management, and bidirectional markdown-to-Confluence sync via Atlassian REST APIs."
+}

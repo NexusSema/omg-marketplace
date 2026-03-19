@@ -4,7 +4,7 @@
 # Usage: push-confluence-page.sh <file.html> <page_id> "description of changes"
 #
 # Requires env vars: ATLASSIAN_EMAIL, ATLASSIAN_API_TOKEN
-# Optional: ATLASSIAN_INSTANCE (defaults to onemount.atlassian.net)
+# Optional: ATLASSIAN_INSTANCE (defaults to yourcompany.atlassian.net)
 
 set -euo pipefail
 
@@ -21,7 +21,7 @@ fi
 ATLASSIAN_EMAIL="${ATLASSIAN_EMAIL:-$(grep 'export ATLASSIAN_EMAIL' ~/.zshrc ~/.bashrc 2>/dev/null | head -1 | sed 's/.*=\"//;s/\".*//')}"
 ATLASSIAN_API_TOKEN="${ATLASSIAN_API_TOKEN:-$(grep 'export ATLASSIAN_API_TOKEN' ~/.zshrc ~/.bashrc 2>/dev/null | head -1 | sed 's/.*=\"//;s/\".*//')}"
 ATLASSIAN_INSTANCE="${ATLASSIAN_INSTANCE:-$(grep 'export ATLASSIAN_INSTANCE' ~/.zshrc ~/.bashrc 2>/dev/null | head -1 | sed 's/.*=\"//;s/\".*//')}"
-ATLASSIAN_INSTANCE="${ATLASSIAN_INSTANCE:-onemount.atlassian.net}"
+ATLASSIAN_INSTANCE="${ATLASSIAN_INSTANCE:-yourcompany.atlassian.net}"
 
 if [ -z "$ATLASSIAN_EMAIL" ] || [ -z "$ATLASSIAN_API_TOKEN" ]; then
   echo "Error: ATLASSIAN_EMAIL and ATLASSIAN_API_TOKEN must be set"
