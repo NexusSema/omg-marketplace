@@ -1,0 +1,11 @@
+{
+  "hooks": {
+    "Stop": [{
+      "hooks": [{
+        "type": "command",
+        "command": "echo 'Scrum Master task complete — verify: Jira issue key or Confluence page URL was confirmed in the response.'",
+        "timeout": 5
+      }]
+    }]
+  }
+}

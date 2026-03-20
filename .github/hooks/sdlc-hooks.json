@@ -1,0 +1,26 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "type": "command",
+        "command": ".github/hooks/scripts/validate-prd-format.sh",
+        "timeout": 15
+      },
+      {
+        "type": "command",
+        "command": ".github/hooks/scripts/validate-arch-format.sh",
+        "timeout": 15
+      },
+      {
+        "type": "command",
+        "command": ".github/hooks/scripts/validate-shard-format.sh",
+        "timeout": 15
+      },
+      {
+        "type": "command",
+        "command": ".github/hooks/scripts/validate-drawio-format.sh",
+        "timeout": 15
+      }
+    ]
+  }
+}
