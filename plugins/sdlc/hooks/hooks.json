@@ -45,6 +45,16 @@
         "matcher": "Edit|Write",
         "hooks": [{
           "type": "command",
+          "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/check-drawio-edge-collisions.py",
+          "async": true,
+          "timeout": 30,
+          "statusMessage": "Checking draw.io edge collisions..."
+        }]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [{
+          "type": "command",
           "command": "${CLAUDE_PLUGIN_ROOT}/scripts/validate-confluence-xhtml.sh",
           "async": true,
           "timeout": 15,

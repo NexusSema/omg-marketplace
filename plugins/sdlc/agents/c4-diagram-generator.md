@@ -114,17 +114,21 @@ Write each `.drawio` file alongside the source documents. Naming convention:
    ```
 2. If **not available** → skip visual validation, keep `.drawio` files as-is, mark Visual QA as `Skipped (no CLI)`
 3. If **available** → for each `.drawio` file:
-   a. Export to PNG at 2× scale for readable text:
+   a. **Edge collision check** (automated — runs automatically via PostToolUse hook when you write the `.drawio` file). If the hook reports collisions, fix them by adding waypoints to route edges around the obstructing containers with a 20px margin before proceeding to visual validation. You can also run the check manually:
+      ```bash
+      python3 ${CLAUDE_PLUGIN_ROOT}/scripts/check-drawio-edge-collisions.py {name}.drawio
+      ```
+   b. Export to PNG at 2× scale for readable text:
       ```bash
       /Applications/draw.io.app/Contents/MacOS/draw.io -x -f png --scale 2 -b 10 -o {name}.drawio.png {name}.drawio
       ```
-   b. Read the PNG using the `Read` tool to visually inspect it
-   c. Evaluate against the defect checklist from `references/visual-validation-guide.md`
-   d. If issues found AND iteration count < 3:
+   c. Read the PNG using the `Read` tool to visually inspect it
+   d. Evaluate against the defect checklist from `references/visual-validation-guide.md`
+   e. If issues found AND iteration count < 3:
       - Log the specific issues identified
       - Apply fixes per the strategy guide in `references/visual-validation-guide.md`
       - Re-write the `.drawio` file, re-export to PNG, re-inspect
-   e. If clean or max iterations (3) reached → proceed
+   f. If clean or max iterations (3) reached → proceed
 4. Keep final PNG files alongside `.drawio` files
 
 ### 7. Summary
