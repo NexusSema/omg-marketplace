@@ -133,3 +133,4 @@ These rules must be followed for every `.drawio` file:
 7. **Always include** `vertex="1"` on shape cells and `edge="1"` on connector cells
 8. **Containers** must use `swimlane;startSize=30;` style with `container=1`
 9. **Groups** (invisible containers) must include `pointerEvents=0` in style
+10. **Always include** `html=1;` at the start of every `style="..."` value — required for HTML labels (`&lt;br&gt;`, `&lt;i&gt;`, `&lt;font&gt;`) to render correctly; without it tags appear as literal text
