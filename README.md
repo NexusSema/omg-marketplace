@@ -1,6 +1,6 @@
-# OM Nexus Official — SDLC Plugin
+# OM Nexus Official — SDLC & Scrum Master Plugins
 
-A Claude Code plugin that brings structured, interactive SDLC workflows to your development process. Built on the [BMAD-METHOD](https://github.com/bmadcode/BMAD-METHOD), the plugin packages battle-tested product planning methodology into composable skills, subagents, and hooks that run directly inside Claude Code.
+Claude Code plugins that bring structured, interactive SDLC workflows and Scrum Master automation to your development process. Built on the [BMAD-METHOD](https://github.com/bmadcode/BMAD-METHOD), the plugins package battle-tested product planning methodology into composable skills, subagents, and hooks that run directly inside Claude Code.
 
 ## Install
 
@@ -12,24 +12,26 @@ A Claude Code plugin that brings structured, interactive SDLC workflows to your 
    /plugin marketplace add NexusSema/omg-marketplace
    ```
 
-2. **Install the plugin:**
+2. **Install the plugins:**
 
    ```
    /plugin install sdlc@om-nexus-official
+   /plugin install scrum-master@om-nexus-official
    ```
 
    You can choose the installation scope:
 
-   | Scope | Command | Who sees it |
-   |-------|---------|-------------|
-   | User (default) | `/plugin install sdlc@om-nexus-official` | You, in all projects |
-   | Project (shared) | `/plugin install sdlc@om-nexus-official --scope project` | Anyone who clones the repo |
-   | Local (private) | `/plugin install sdlc@om-nexus-official --scope local` | You, in this project only |
+   | Scope | Flag | Who sees it |
+   |-------|------|-------------|
+   | User (default) | _(none)_ | You, in all projects |
+   | Project (shared) | `--scope project` | Anyone who clones the repo |
+   | Local (private) | `--scope local` | You, in this project only |
 
 3. **Verify:**
 
    ```
    /sdlc:help
+   /sm:help
    ```
 
 ### Cowork (Desktop)
@@ -52,7 +54,8 @@ Alternatively, you can configure it at the project level so it loads automatical
     }
   },
   "enabledPlugins": {
-    "sdlc@om-nexus-official": true
+    "sdlc@om-nexus-official": true,
+    "scrum-master@om-nexus-official": true
   }
 }
 ```
@@ -62,11 +65,11 @@ Commit and push — anyone opening the project in Cowork will be prompted to ins
 ### Managing the Plugin
 
 ```
-/plugin update sdlc@om-nexus-official      # Update to latest version
-/plugin disable sdlc@om-nexus-official     # Disable without removing
-/plugin enable sdlc@om-nexus-official      # Re-enable
-/plugin uninstall sdlc@om-nexus-official   # Remove completely
-/reload-plugins                             # Apply changes without restarting
+/plugin update sdlc@om-nexus-official           # Update to latest version
+/plugin update scrum-master@om-nexus-official   # Update scrum-master
+/plugin disable sdlc@om-nexus-official          # Disable without removing
+/plugin uninstall sdlc@om-nexus-official        # Remove completely
+/reload-plugins                                  # Apply changes without restarting
 ```
 
 ## Usage
@@ -95,6 +98,11 @@ Commit and push — anyone opening the project in Cowork will be prompted to ins
 
 # Confluence
 /sdlc:confluence        # Fetch, edit, push, search, create Confluence pages
+
+# Scrum Master
+/sm:jira                # Manage Jira issues, sprints, and boards
+/sm:sync-docs           # Bidirectional markdown ↔ Confluence sync
+/sm:help                # Scrum Master plugin documentation
 
 # General
 /sdlc:help              # Plugin documentation and architecture overview
@@ -142,6 +150,14 @@ Commit and push — anyone opening the project in Cowork will be prompted to ins
 | `/sdlc:confluence` | Manage Confluence pages — fetch, edit, push, search, create, delete |
 
 The Confluence skill also auto-triggers when you paste a Confluence URL or mention Confluence pages in conversation.
+
+### Scrum Master
+
+| Command | What it does |
+|---------|-------------|
+| `/sm:jira` | Manage Jira issues, sprints, and boards — create, update, transition, search, bulk operations |
+| `/sm:sync-docs` | Push `.md` → Confluence or pull Confluence → `.md` with frontmatter tracking |
+| `/sm:help` | Scrum Master plugin documentation and workflow overview |
 
 ### General
 
@@ -203,6 +219,14 @@ plugins/sdlc/
 ├── scripts/                    # Format validation + push scripts
 │   └── push-confluence-page.sh # Push local XHTML back to Confluence (auto-version)
 └── .claude-plugin/             # Plugin manifest
+
+plugins/scrum-master/
+├── skills/
+│   ├── jira/                   # Jira REST API v3 — issues, sprints, boards, bulk ops
+│   └── confluence-sync/        # Bidirectional markdown ↔ Confluence sync
+├── commands/                   # User entry points (/sm:*)
+├── hooks/                      # Stop verification hooks
+└── .claude-plugin/             # Plugin manifest
 ```
 
 ## Configuration
@@ -240,6 +264,7 @@ To get an API token: go to [id.atlassian.com/manage-profile/security/api-tokens]
 - [x] **Epics & Stories** — Requirements decomposition and implementation gaps analysis
 - [x] **Technical Specifications** — Create, edit, review, and cross-document change propagation
 - [x] **Confluence** — Page management, SDLC artifact push/pull
+- [x] **Scrum Master** — Jira issue management and bidirectional Confluence sync
 - [ ] **UX Design** — Interaction flows, design specs
 - [ ] **Sprint Planning** — Sprint generation and status tracking
 - [ ] **Implementation** — Story-driven development workflows
